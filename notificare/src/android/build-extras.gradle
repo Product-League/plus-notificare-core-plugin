@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://maven.notifica.re/releases" }
+    }
+    dependencies {
+        classpath 're.notifica.gradle:notificare-services:1.0.0'
+    }
+}
+
 repositories {
     google()
     jcenter()
@@ -11,3 +22,7 @@ dependencies {
 
     implementation "re.notifica:core:$notificare_version"
 }
+
+cdvPluginPostBuildExtras.add({
+    apply plugin: re.notifica.gradle.NotificareServicesPlugin
+})

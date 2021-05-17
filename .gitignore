@@ -13,5 +13,6 @@ node_modules/
 *.iml
 
 google-services.json
+agconnect-services.json
 notificare-services.json
 NotificareServices.plist

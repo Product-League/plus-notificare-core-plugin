@@ -104,8 +104,10 @@ function onDeviceReady() {
             console.log(`---> Received notification = ${JSON.stringify(notification)}`);
         });
 
-        NotificarePush.onNotificationOpened((notification) => {
+        NotificarePush.onNotificationOpened(async (notification) => {
             console.log(`---> Opened notification = ${JSON.stringify(notification)}`);
+
+            await NotificarePushUI.presentNotification(notification);
         });
 
         NotificareInbox.onBadgeUpdated((badge) => {

@@ -1,5 +1,6 @@
 package re.notifica.push.cordova
 
+import android.content.Intent
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaArgs
 import org.apache.cordova.CordovaPlugin
@@ -12,6 +13,15 @@ class NotificarePushPlugin : CordovaPlugin() {
 
     override fun pluginInitialize() {
         NotificarePush.intentReceiver = NotificarePushPluginReceiver::class.java
+
+        val intent = cordova.activity.intent
+        if (intent != null) NotificarePush.handleTrampolineIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        if (intent != null) NotificarePush.handleTrampolineIntent(intent)
     }
 
     override fun execute(action: String, args: CordovaArgs, callback: CallbackContext): Boolean {

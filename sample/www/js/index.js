@@ -91,6 +91,13 @@ function onDeviceReady() {
             console.log(`---> Remote notifications enabled = ${await NotificarePush.isRemoteNotificationsEnabled()}`);
 
             await NotificarePush.setPresentationOptions(['alert', 'sound', 'badge']);
+
+            //
+            // Inbox
+            //
+
+            console.log(`---> Badge = ${await NotificareInbox.getBadge()}`);
+            console.log(`---> Items = ${(await NotificareInbox.getItems()).length}`);
         });
 
         NotificarePush.onNotificationReceived((notification) => {
@@ -99,6 +106,14 @@ function onDeviceReady() {
 
         NotificarePush.onNotificationOpened((notification) => {
             console.log(`---> Opened notification = ${JSON.stringify(notification)}`);
+        });
+
+        NotificareInbox.onBadgeUpdated((badge) => {
+            console.log(`---> Badge updated = ${badge}`);
+        });
+
+        NotificareInbox.onInboxUpdated((items) => {
+            console.log(`---> Inbox updated = ${JSON.stringify(items)}`);
         });
     })();
 }

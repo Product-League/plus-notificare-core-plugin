@@ -1,0 +1,19 @@
+repositories {
+    google()
+    jcenter()
+
+    maven { url 'https://maven.notifica.re/releases' }
+    maven { url 'https://maven.notifica.re/prereleases' }
+    maven { url 'https://developer.huawei.com/repo' }
+
+    mavenLocal()
+}
+
+dependencies {
+    def notificare_version = '3.0.0-alpha.1'
+
+    api "re.notifica:core:$notificare_version"
+    api "re.notifica:push-ui:$notificare_version"
+    implementation "re.notifica:push-ui-fcm:$notificare_version"
+    implementation "re.notifica:push-ui-hms:$notificare_version"
+}

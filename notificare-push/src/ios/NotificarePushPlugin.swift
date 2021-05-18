@@ -32,7 +32,7 @@ class NotificarePushPlugin : CDVPlugin {
 
     @objc
     func setAuthorizationOptions(_ command: CDVInvokedUrlCommand) {
-        let options = command.arguments as! [String]
+        let options = command.argument(at: 0) as! [String]
         var authorizationOptions: UNAuthorizationOptions = []
 
         options.forEach { option in
@@ -81,7 +81,7 @@ class NotificarePushPlugin : CDVPlugin {
 
     @objc
     func setCategoryOptions(_ command: CDVInvokedUrlCommand) {
-        let options = command.arguments as! [String]
+        let options = command.argument(at: 0) as! [String]
         var categoryOptions: UNNotificationCategoryOptions = []
 
         options.forEach { option in
@@ -118,7 +118,7 @@ class NotificarePushPlugin : CDVPlugin {
 
     @objc
     func setPresentationOptions(_ command: CDVInvokedUrlCommand) {
-        let options = command.arguments as! [String]
+        let options = command.argument(at: 0) as! [String]
         var presentationOptions: UNNotificationPresentationOptions = []
 
         options.forEach { option in

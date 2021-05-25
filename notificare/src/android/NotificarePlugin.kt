@@ -302,10 +302,8 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun fetchUserData(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        Notificare.deviceManager.fetchUserData(object : NotificareCallback<NotificareUserData?> {
-            override fun onSuccess(result: NotificareUserData?) {
-                if (result == null) return callback.void()
-
+        Notificare.deviceManager.fetchUserData(object : NotificareCallback<NotificareUserData> {
+            override fun onSuccess(result: NotificareUserData) {
                 val json = JSONObject()
                 result.forEach { json.put(it.key, it.value) }
 
@@ -325,7 +323,9 @@ class NotificarePlugin : CordovaPlugin() {
         val userData = mutableMapOf<String, String>()
         while (iterator.hasNext()) {
             val key = iterator.next()
-            userData[key] = json.getString(key)
+            if (!json.isNull(key)) {
+                userData[key] = json.getString(key)
+            }
         }
 
         Notificare.deviceManager.updateUserData(userData, object : NotificareCallback<Unit> {

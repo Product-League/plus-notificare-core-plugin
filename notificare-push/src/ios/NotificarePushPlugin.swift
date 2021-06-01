@@ -158,6 +158,12 @@ class NotificarePushPlugin : CDVPlugin {
     }
 
     @objc
+    func isAllowedUI(_ command: CDVInvokedUrlCommand) {
+        let result = CDVPluginResult(status: .ok, messageAs: NotificarePush.shared.allowedUI)
+        self.commandDelegate!.send(result, callbackId: command.callbackId)
+    }
+
+    @objc
     func enableRemoteNotifications(_ command: CDVInvokedUrlCommand) {
         NotificarePush.shared.enableRemoteNotifications { result in
             switch result {

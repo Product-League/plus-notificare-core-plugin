@@ -30,6 +30,7 @@ class NotificarePushPlugin : CordovaPlugin() {
             "setCategoryOptions" -> setCategoryOptions(args, callback)
             "setPresentationOptions" -> setPresentationOptions(args, callback)
             "isRemoteNotificationsEnabled" -> isRemoteNotificationsEnabled(args, callback)
+            "isAllowedUI" -> isAllowedUI(args, callback)
             "enableRemoteNotifications" -> enableRemoteNotifications(args, callback)
             "disableRemoteNotifications" -> disableRemoteNotifications(args, callback)
 
@@ -64,6 +65,10 @@ class NotificarePushPlugin : CordovaPlugin() {
 
     private fun isRemoteNotificationsEnabled(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         callback.success(NotificarePush.isRemoteNotificationsEnabled)
+    }
+
+    private fun isAllowedUI(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
+        callback.success(NotificarePush.allowedUI)
     }
 
     private fun enableRemoteNotifications(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {

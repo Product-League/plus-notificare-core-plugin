@@ -28,6 +28,12 @@ export class NotificarePush {
     });
   }
 
+  static async isAllowedUI(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificarePush', 'isAllowedUI', []);
+    });
+  }
+
   static async enableRemoteNotifications(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       cordova.exec(resolve, reject, 'NotificarePush', 'enableRemoteNotifications', []);

@@ -10,9 +10,8 @@ repositories {
 
 dependencies {
     def notificare_version = '3.0.0-alpha.1'
-
-    api "re.notifica:core:$notificare_version"
-    api "re.notifica:inbox:$notificare_version"
+    api "re.notifica:notificare:$notificare_version"
+    api "re.notifica:notificare-inbox:$notificare_version"
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
 }

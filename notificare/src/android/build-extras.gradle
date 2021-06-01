@@ -19,8 +19,7 @@ repositories {
 
 dependencies {
     def notificare_version = '3.0.0-alpha.1'
-
-    implementation "re.notifica:core:$notificare_version"
+    implementation "re.notifica:notificare:$notificare_version"
 }
 
 cdvPluginPostBuildExtras.add({

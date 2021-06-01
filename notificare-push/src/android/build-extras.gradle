@@ -11,9 +11,8 @@ repositories {
 
 dependencies {
     def notificare_version = '3.0.0-alpha.1'
-
-    api "re.notifica:core:$notificare_version"
-    api "re.notifica:push:$notificare_version"
-    implementation "re.notifica:push-fcm:$notificare_version"
-    implementation "re.notifica:push-hms:$notificare_version"
+    api "re.notifica:notificare:$notificare_version"
+    api "re.notifica:notificare-push:$notificare_version"
+    implementation "re.notifica:notificare-push-fcm:$notificare_version"
+    implementation "re.notifica:notificare-push-hms:$notificare_version"
 }

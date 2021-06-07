@@ -26,6 +26,8 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-notificare": {},
+      "cordova-plugin-notificare-inbox": {},
+      "cordova-plugin-notificare-push": {},
       "cordova-plugin-notificare-push-ui": {}
     },
     "platforms": [

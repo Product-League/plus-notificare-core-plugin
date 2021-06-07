@@ -36,8 +36,6 @@
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <receiver android:name="re.notifica.push.ui.cordova.NotificarePushUIPluginReceiver" android:exported="false" />
-
             <activity
                     android:name="re.notifica.push.ui.NotificationActivity"
                     android:exported="false"
@@ -47,7 +45,6 @@
 
         <source-file src="src/android/NotificarePushUIPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />
         <source-file src="src/android/NotificarePushUIPluginEventManager.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />
-        <source-file src="src/android/NotificarePushUIPluginReceiver.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />
         <source-file src="src/android/notificare_styles.xml" target-dir="/res/values" />
 
         <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />

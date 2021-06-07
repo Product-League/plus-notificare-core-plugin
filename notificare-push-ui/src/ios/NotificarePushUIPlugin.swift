@@ -138,16 +138,142 @@ class NotificarePushUIPlugin : CDVPlugin {
 }
 
 extension NotificarePushUIPlugin: NotificarePushUIDelegate {
-//    func notificare(_ notificarePush: NotificarePush, didReceiveNotification notification: NotificareNotification) {
+    func notificare(_ notificarePushUI: NotificarePushUI, willPresentNotification notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "notification_will_present",
+                payload: try notification.toJson()
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the notification_will_present event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, didPresentNotification notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "notification_presented",
+                payload: try notification.toJson()
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the notification_presented event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, didFinishPresentingNotification notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "notification_finished_presenting",
+                payload: try notification.toJson()
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the notification_finished_presenting event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, didFailToPresentNotification notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "notification_failed_to_present",
+                payload: try notification.toJson()
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the notification_failed_to_present event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, didClickURL url: URL, in notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "notification_url_clicked",
+                payload: [
+                    "notification": try notification.toJson(),
+                    "url": url.absoluteString,
+                ]
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the notification_url_clicked event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, willExecuteAction action: NotificareNotification.Action, for notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "action_will_execute",
+                payload: [
+                    "notification": try notification.toJson(),
+                    "action": try action.toJson(),
+                ]
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the action_will_execute event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, didExecuteAction action: NotificareNotification.Action, for notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "action_executed",
+                payload: [
+                    "notification": try notification.toJson(),
+                    "action": try action.toJson(),
+                ]
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the action_executed event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, didNotExecuteAction action: NotificareNotification.Action, for notification: NotificareNotification) {
+        do {
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "action_not_executed",
+                payload: [
+                    "notification": try notification.toJson(),
+                    "action": try action.toJson(),
+                ]
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the action_not_executed event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, didFailToExecuteAction action: NotificareNotification.Action, for notification: NotificareNotification, error: Error?) {
+        do {
+            var payload: [String: Any] = [
+                "notification": try notification.toJson(),
+                "action": try action.toJson(),
+            ]
+            
+            if let error = error {
+                payload["error"] = error.localizedDescription
+            }
+            
+            NotificarePushUIPluginEventManager.dispatchEvent(
+                name: "action_failed_to_execute",
+                payload: payload
+            )
+        } catch {
+            NotificareLogger.error("Failed to emit the action_failed_to_execute event.\n\(error)")
+        }
+    }
+    
+    func notificare(_ notificarePushUI: NotificarePushUI, shouldPerformSelectorWithURL url: URL, in action: NotificareNotification.Action, for notification: NotificareNotification) {
 //        do {
-//            NotificarePushUIPluginEventManager.dispatchEvent(
-//                name: "notification_received",
-//                payload: try notification.toJson()
-//            )
+//            dispatchEvent("custom_action_received", payload: [
+//                "notification": try notification.toJson(),
+//                "url": url.absoluteString,
+//            ])
 //        } catch {
-//            NotificareLogger.error("Failed to emit the notification_received event.\n\(error)")
+//            NotificareLogger.error("Failed to emit the custom_action_received event.\n\(error)")
 //        }
-//    }
+        
+        
+        NotificarePushUIPluginEventManager.dispatchEvent(
+            name: "custom_action_received",
+            payload: url.absoluteString
+        )
+    }
 }
 
 extension NotificareNotification {

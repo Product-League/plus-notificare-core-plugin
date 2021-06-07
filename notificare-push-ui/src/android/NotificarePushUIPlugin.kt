@@ -1,18 +1,20 @@
 package re.notifica.push.ui.cordova
 
+import android.net.Uri
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaArgs
 import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import org.json.JSONObject
+import re.notifica.NotificareLogger
 import re.notifica.models.NotificareNotification
 import re.notifica.push.ui.NotificarePushUI
 
-class NotificarePushUIPlugin : CordovaPlugin() {
+class NotificarePushUIPlugin : CordovaPlugin(), NotificarePushUI.NotificationLifecycleListener {
 
     override fun pluginInitialize() {
-        NotificarePushUI.intentReceiver = NotificarePushUIPluginReceiver::class.java
+        NotificarePushUI.addLifecycleListener(this)
     }
 
     override fun execute(action: String, args: CordovaArgs, callback: CallbackContext): Boolean {
@@ -72,6 +74,103 @@ class NotificarePushUIPlugin : CordovaPlugin() {
 
         NotificarePushUI.presentAction(activity, notification, action)
         callback.void()
+    }
+
+    // endregion
+
+    // region NotificarePushUI.NotificationLifecycleListener
+
+    override fun onNotificationWillPresent(notification: NotificareNotification) {
+        try {
+
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the notification_will_present event.", e)
+        }
+    }
+
+    override fun onNotificationPresented(notification: NotificareNotification) {
+        try {
+            NotificarePushUIPluginEventManager.dispatchEvent("notification_presented", notification.toJson())
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the notification_presented event.", e)
+        }
+    }
+
+    override fun onNotificationFinishedPresenting(notification: NotificareNotification) {
+        try {
+            NotificarePushUIPluginEventManager.dispatchEvent("notification_finished_presenting", notification.toJson())
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the notification_finished_presenting event.", e)
+        }
+    }
+
+    override fun onNotificationFailedToPresent(notification: NotificareNotification) {
+        try {
+            NotificarePushUIPluginEventManager.dispatchEvent("notification_failed_to_present", notification.toJson())
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the notification_failed_to_present event.", e)
+        }
+    }
+
+    override fun onNotificationUrlClicked(notification: NotificareNotification, uri: Uri) {
+        try {
+            val json = JSONObject()
+            json.put("notification", notification.toJson())
+            json.put("url", uri.toString())
+
+            NotificarePushUIPluginEventManager.dispatchEvent("notification_url_clicked", json)
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the notification_url_clicked event.", e)
+        }
+    }
+
+    override fun onActionWillExecute(notification: NotificareNotification, action: NotificareNotification.Action) {
+        try {
+            val json = JSONObject()
+            json.put("notification", notification.toJson())
+            json.put("action", action.toJson())
+
+            NotificarePushUIPluginEventManager.dispatchEvent("action_will_execute", json)
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the action_will_execute event.", e)
+        }
+    }
+
+    override fun onActionExecuted(notification: NotificareNotification, action: NotificareNotification.Action) {
+        try {
+            val json = JSONObject()
+            json.put("notification", notification.toJson())
+            json.put("action", action.toJson())
+
+            NotificarePushUIPluginEventManager.dispatchEvent("action_executed", json)
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the action_executed event.", e)
+        }
+    }
+
+    override fun onActionFailedToExecute(
+        notification: NotificareNotification,
+        action: NotificareNotification.Action,
+        error: Exception?
+    ) {
+        try {
+            val json = JSONObject()
+            json.put("notification", notification.toJson())
+            json.put("action", action.toJson())
+            if (error != null) json.put("error", error.localizedMessage)
+
+            NotificarePushUIPluginEventManager.dispatchEvent("action_failed_to_execute", json)
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the action_failed_to_execute event.", e)
+        }
+    }
+
+    override fun onCustomActionReceived(uri: Uri) {
+        try {
+            NotificarePushUIPluginEventManager.dispatchEvent("custom_action_received", uri.toString())
+        } catch (e: Exception) {
+            NotificareLogger.error("Failed to emit the custom_action_received event.", e)
+        }
     }
 
     // endregion

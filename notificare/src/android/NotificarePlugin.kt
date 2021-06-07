@@ -1,5 +1,6 @@
 package re.notifica.cordova
 
+import android.content.Intent
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaArgs
 import org.apache.cordova.CordovaPlugin
@@ -17,6 +18,22 @@ class NotificarePlugin : CordovaPlugin() {
 
     override fun pluginInitialize() {
         Notificare.intentReceiver = NotificarePluginReceiver::class.java
+
+        val intent = cordova.activity.intent
+        if (intent != null) onNewIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        // Try handling the test device intent.
+        if (Notificare.handleTestDeviceIntent(intent)) return
+
+        // Try handling the dynamic link intent.
+        if (Notificare.handleDynamicLinkIntent(cordova.activity, intent)) return
+
+        val url = intent.data?.toString()
+        if (url != null) {
+            NotificarePluginEventManager.dispatchEvent("url_opened", url)
+        }
     }
 
     override fun execute(action: String, args: CordovaArgs, callback: CallbackContext): Boolean {

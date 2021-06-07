@@ -15,13 +15,11 @@ class NotificarePushPlugin : CordovaPlugin() {
         NotificarePush.intentReceiver = NotificarePushPluginReceiver::class.java
 
         val intent = cordova.activity.intent
-        if (intent != null) NotificarePush.handleTrampolineIntent(intent)
+        if (intent != null) onNewIntent(intent)
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-
-        if (intent != null) NotificarePush.handleTrampolineIntent(intent)
+    override fun onNewIntent(intent: Intent) {
+        NotificarePush.handleTrampolineIntent(intent)
     }
 
     override fun execute(action: String, args: CordovaArgs, callback: CallbackContext): Boolean {

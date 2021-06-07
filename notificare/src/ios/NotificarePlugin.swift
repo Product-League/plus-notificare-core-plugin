@@ -7,6 +7,8 @@ class NotificarePlugin : CDVPlugin {
         super.pluginInitialize()
         
         Notificare.shared.delegate = self
+        
+        _ = NotificareSwizzler.addInterceptor(self)
     }
     
     @objc
@@ -404,5 +406,32 @@ extension NotificarePlugin: NotificareDelegate {
         } catch {
             NotificareLogger.error("Failed to emit the ready event.\n\(error)")
         }
+    }
+}
+
+extension NotificarePlugin: NotificareAppDelegateInterceptor {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        if Notificare.shared.handleTestDeviceUrl(url) {
+            return true
+        }
+        
+        if Notificare.shared.handleDynamicLinkUrl(url) {
+            return true
+        }
+        
+        NotificarePluginEventManager.dispatchEvent(
+            name: "url_opened",
+            payload: url.absoluteString
+        )
+        
+        return true
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        guard let url = userActivity.webpageURL else {
+            return false
+        }
+        
+        return Notificare.shared.handleDynamicLinkUrl(url)
     }
 }

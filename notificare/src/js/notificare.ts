@@ -75,4 +75,8 @@ export class Notificare {
   static onDeviceRegistered(callback: (application: NotificareApplication) => void): EventSubscription {
     return new EventSubscription('device_registered', callback);
   }
+
+  static onUrlOpened(callback: (url: string) => void): EventSubscription {
+    return new EventSubscription('url_opened', callback);
+  }
 }

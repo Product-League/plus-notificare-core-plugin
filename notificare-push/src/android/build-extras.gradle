@@ -1,6 +1,6 @@
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 
     maven { url 'https://maven.notifica.re/releases' }
     maven { url 'https://maven.notifica.re/prereleases' }

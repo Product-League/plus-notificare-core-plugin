@@ -16,3 +16,6 @@ google-services.json
 agconnect-services.json
 notificare-services.json
 NotificareServices.plist
+
+# Packed libs
+cordova-plugin-notificare-*.tgz

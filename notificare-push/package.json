@@ -4,9 +4,10 @@
   "description": "Notificare Push Cordova Plugin.",
   "author": "Notificare",
   "main": "build/notificare-push.bundle.js",
-  "typings": "build/js/index.d.ts",
+  "types": "build/js/index.d.ts",
   "license": "MIT",
   "keywords": [
+    "notificare",
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios"
@@ -14,12 +15,22 @@
   "repository": {
     "url": "https://github.com/Notificare/notificare-sdk-cordova"
   },
+  "files": [
+    "src",
+    "build",
+    "plugin.xml"
+  ],
   "scripts": {
+    "prepare": "run-s build",
+    "prepack": "run-s symlinks-to-files",
+    "postpack": "run-s restore-symlinks",
     "build": "run-s clean build:typescript build:bundle",
     "build:typescript": "tsc -p tsconfig.json",
     "build:bundle": "rollup --config",
     "clean": "rimraf build",
-    "lint": "eslint \"**/*.{js,ts,tsx}\""
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "symlinks-to-files": "rm README.md LICENSE CHANGELOG.md; cp ../README.md ../LICENSE ../CHANGELOG.md .",
+    "restore-symlinks": "rm README.md LICENSE CHANGELOG.md; ln -s ../README.md ../LICENSE ../CHANGELOG.md ."
   },
   "cordova": {
     "id": "cordova-plugin-notificare-push",

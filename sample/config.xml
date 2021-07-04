@@ -30,19 +30,5 @@
         <allow-intent href="itms-apps:*" />
 
         <resource-file src="NotificareServices.plist" target="NotificareServices.plist" />
-
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
-            <array>
-                <dict>
-                    <key>CFBundleURLName</key>
-                    <string>re.notifica.demo</string>
-                    <key>CFBundleURLSchemes</key>
-                    <array>
-                        <string>re.notifica</string>
-                        <string>test.nc585702253cad4414df0e3b20</string>
-                    </array>
-                </dict>
-            </array>
-        </config-file>
     </platform>
 </widget>

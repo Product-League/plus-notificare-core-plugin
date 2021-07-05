@@ -9,10 +9,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import re.notifica.Notificare
 import re.notifica.NotificareCallback
-import re.notifica.models.NotificareApplication
-import re.notifica.models.NotificareDoNotDisturb
-import re.notifica.models.NotificareNotification
-import re.notifica.models.NotificareUserData
+import re.notifica.models.*
 
 class NotificarePlugin : CordovaPlugin() {
 
@@ -66,6 +63,9 @@ class NotificarePlugin : CordovaPlugin() {
             "clearDoNotDisturb" -> clearDoNotDisturb(args, callback)
             "fetchUserData" -> fetchUserData(args, callback)
             "updateUserData" -> updateUserData(args, callback)
+
+            // Events Manager
+            "logCustom" -> logCustom(args, callback)
 
             // Events
             "registerListener" -> registerListener(args, callback)
@@ -354,6 +354,27 @@ class NotificarePlugin : CordovaPlugin() {
                 callback.error(e.message)
             }
         })
+    }
+
+    // endregion
+
+    // region Notificare Events Manager
+
+    private fun logCustom(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
+        val event = args.getString(0)
+        val json: JSONObject? = if (!args.isNull(1)) args.getJSONObject(1) else null
+
+        val data: NotificareEventData?
+
+        try {
+            data = json?.toString()?.let { NotificareEvent.dataAdapter.fromJson(it) }
+        } catch (e: Exception) {
+            callback.error(e.message)
+            return
+        }
+
+        Notificare.eventsManager.logCustom(event, data)
+        callback.void()
     }
 
     // endregion

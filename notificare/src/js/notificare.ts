@@ -1,4 +1,5 @@
 import { NotificareDeviceManager } from './notificare-device-manager';
+import { NotificareEventsManager } from './notificare-events-manager';
 import { EventSubscription } from './events';
 import { NotificareApplication, NotificareNotification } from './models';
 import { Nullable } from './utils';
@@ -6,6 +7,7 @@ import { Nullable } from './utils';
 export class Notificare {
   // Modules
   static readonly deviceManager = NotificareDeviceManager;
+  static readonly eventsManager = NotificareEventsManager;
 
   // Functions
   static isConfigured(): Promise<boolean> {

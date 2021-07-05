@@ -383,6 +383,23 @@ class NotificarePlugin : CDVPlugin {
             }
         }
     }
+    
+    @objc
+    func logCustom(_ command: CDVInvokedUrlCommand) {
+        let event = command.argument(at: 0) as! String
+        let data = command.argument(at: 1) as? [String: Any]
+        
+        Notificare.shared.eventsManager.logCustom(event, data: data) { result in
+            switch result {
+            case .success:
+                let result = CDVPluginResult(status: .ok)
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
+            case let .failure(error):
+                let result = CDVPluginResult(status: .error, messageAs: error.localizedDescription)
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
+            }
+        }
+    }
 }
 
 extension NotificarePlugin: NotificareDelegate {

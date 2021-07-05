@@ -48,6 +48,16 @@ function onDeviceReady() {
             // Stop listening to device_registered events.
             // sub.remove();
 
+            await Notificare.eventsManager.logCustom('CUSTOM_EVENT');
+            await Notificare.eventsManager.logCustom('CUSTOM_EVENT', {
+                color: 'blue',
+                lovesNotificare: true,
+                nested: {
+                    works: true,
+                    list: ['a', 'b', 'c'],
+                },
+            });
+
             setTimeout(async function register() {
                 await Notificare.deviceManager.register(null, null);
             }, 2000);

@@ -1,24 +1,30 @@
 {
   "name": "cordova-plugin-notificare-inbox",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-beta.2",
   "description": "Notificare Inbox Cordova Plugin.",
-  "author": "Notificare",
-  "main": "build/notificare-inbox.bundle.js",
-  "types": "build/js/index.d.ts",
+  "author": "Notificare <info@notifica.re> (https://notificare.com)",
   "license": "MIT",
+  "homepage": "https://github.com/notificare/notificare-sdk-cordova#readme",
+  "repository": {
+    "url": "https://github.com/Notificare/notificare-sdk-cordova"
+  },
+  "bugs": {
+    "url": "https://github.com/Notificare/notificare-sdk-cordova/issues"
+  },
   "keywords": [
     "notificare",
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios"
   ],
-  "repository": {
-    "url": "https://github.com/Notificare/notificare-sdk-cordova"
-  },
+  "main": "build/notificare-inbox.bundle.js",
+  "types": "build/js/index.d.ts",
   "files": [
     "src",
     "build",
-    "plugin.xml"
+    "plugin.xml",
+    "CHANGELOG.md",
+    "MIGRATION.md"
   ],
   "scripts": {
     "prepare": "run-s build",

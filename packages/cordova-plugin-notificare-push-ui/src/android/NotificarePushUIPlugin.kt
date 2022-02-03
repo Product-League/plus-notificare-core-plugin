@@ -165,7 +165,11 @@ class NotificarePushUIPlugin : CordovaPlugin(), NotificarePushUI.NotificationLif
         }
     }
 
-    override fun onCustomActionReceived(uri: Uri) {
+    override fun onCustomActionReceived(
+        notification: NotificareNotification,
+        action: NotificareNotification.Action,
+        uri: Uri
+    ) {
         try {
             NotificarePushUIPluginEventManager.dispatchEvent("custom_action_received", uri.toString())
         } catch (e: Exception) {

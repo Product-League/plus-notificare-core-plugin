@@ -2,8 +2,7 @@
   "root": true,
   "extends": [
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint"
+    "plugin:prettier/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
@@ -11,5 +10,8 @@
   ],
   "rules": {
     "prettier/prettier": "error"
-  }
+  },
+  "ignorePatterns": [
+    "build/"
+  ]
 }

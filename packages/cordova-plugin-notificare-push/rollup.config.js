@@ -11,6 +11,7 @@ export default [
       exports: 'default',
       sourcemap: true,
     },
+    external: ['cordova'],
     plugins: [
       typescript({
         tsconfig: 'tsconfig.json',

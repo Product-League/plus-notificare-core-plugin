@@ -5,10 +5,11 @@ export function bootstrap() {
     'deviceready',
     function onDeviceReady() {
       cordova.exec(
-        function onSuccess(event) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        function onSuccess(event: any) {
           EVENT_SUBSCRIPTIONS.filter((sub) => sub.event === event.name).forEach((sub) => sub.callback(event.data));
         },
-        function onFailure(error) {
+        function onFailure(error: unknown) {
           console.error('Failed to register event listener.', error);
         },
         'Notificare',
@@ -21,11 +22,12 @@ export function bootstrap() {
 }
 
 export class EventSubscription {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(readonly event: string, readonly callback: (data: any) => void) {
     EVENT_SUBSCRIPTIONS.push(this);
   }
 
-  remove() {
+  remove(): void {
     const index = EVENT_SUBSCRIPTIONS.indexOf(this);
     if (index >= 0) {
       EVENT_SUBSCRIPTIONS.splice(index, 1);

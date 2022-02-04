@@ -5,7 +5,8 @@ export function bootstrap(): void {
     'deviceready',
     function onDeviceReady() {
       cordova.exec(
-        function onSuccess(event) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        function onSuccess(event: any) {
           EVENT_SUBSCRIPTIONS.filter((sub) => sub.event === event.name).forEach((sub) => sub.callback(event.data));
         },
         function onFailure(error) {
@@ -21,6 +22,7 @@ export function bootstrap(): void {
 }
 
 export class EventSubscription {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(readonly event: string, readonly callback: (data: any) => void) {
     EVENT_SUBSCRIPTIONS.push(this);
   }

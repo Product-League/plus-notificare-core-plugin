@@ -27,16 +27,23 @@
     "MIGRATION.md"
   ],
   "scripts": {
-    "prepare": "run-s build",
-    "prepack": "run-s symlinks-to-files",
-    "postpack": "run-s restore-symlinks",
-    "build": "run-s clean build:typescript build:bundle",
-    "build:typescript": "tsc -p tsconfig.json",
+    "build": "yarn clean; yarn build:typescript; yarn build:bundle",
+    "build:typescript": "tsc",
     "build:bundle": "rollup --config",
-    "clean": "rimraf build",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "symlinks-to-files": "rm README.md LICENSE CHANGELOG.md; cp ../README.md ../LICENSE ../CHANGELOG.md .",
-    "restore-symlinks": "rm README.md LICENSE CHANGELOG.md; ln -s ../README.md ../LICENSE ../CHANGELOG.md ."
+    "clean": "rm -rf build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "pack": "npm pack",
+    "prepack": "yarn build; yarn docs:replace-symbolic-links",
+    "postpack": "yarn docs:create-symbolic-links",
+    "prepare": "yarn build",
+    "docs:create-symbolic-links": "rm README.md CHANGELOG.md MIGRATION.md; ln -s ../../README.md ../../CHANGELOG.md ../../MIGRATION.md .",
+    "docs:replace-symbolic-links": "rm README.md CHANGELOG.md MIGRATION.md; cp ../../README.md ../../CHANGELOG.md ../../MIGRATION.md ."
+  },
+  "peerDependencies": {
+    "cordova-plugin-notificare": "^3.0.0-beta.2"
+  },
+  "devDependencies": {
+    "cordova-plugin-notificare": "^3.0.0-beta.2"
   },
   "cordova": {
     "id": "cordova-plugin-notificare-push",
@@ -53,33 +60,5 @@
         "cordova-ios": ">=5.0.0"
       }
     }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^17.0.0",
-    "@types/cordova": "^0.0.34",
-    "@typescript-eslint/eslint-plugin": "^4.9.1",
-    "@typescript-eslint/parser": "^4.9.1",
-    "cordova-plugin-notificare": "../notificare",
-    "eslint": "^7.15.0",
-    "eslint-config-prettier": "^7.0.0",
-    "eslint-plugin-prettier": "^3.2.0",
-    "husky": "^4.3.5",
-    "lint-staged": "^10.5.3",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.2.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.35.1",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.29.0",
-    "typescript": "^4.1.2"
-  },
-  "peerDependencies": {
-    "cordova-plugin-notificare": "../notificare"
   }
 }

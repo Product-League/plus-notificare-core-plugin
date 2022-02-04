@@ -58,6 +58,7 @@ export class NotificarePush {
     return new EventSubscription('system_notification_received', callback);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static onUnknownNotificationReceived(callback: (notification: Record<any, any>) => void): EventSubscription {
     return new EventSubscription('unknown_notification_received', callback);
   }

@@ -9,11 +9,14 @@ import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import org.json.JSONObject
+import re.notifica.Notificare
 import re.notifica.NotificareCallback
-import re.notifica.inbox.NotificareInbox
+import re.notifica.inbox.ktx.inbox
 import re.notifica.inbox.models.NotificareInboxItem
+import re.notifica.inbox.models.fromJson
+import re.notifica.inbox.models.toJson
+import re.notifica.internal.NotificareLogger
 import re.notifica.models.NotificareNotification
-import re.notifica.NotificareLogger
 import java.util.*
 
 class NotificareInboxPlugin : CordovaPlugin() {
@@ -25,7 +28,7 @@ class NotificareInboxPlugin : CordovaPlugin() {
             val json = JSONArray()
             items.forEach { json.put(it.toJson()) }
 
-            NotificareInboxPluginEventManager.dispatchEvent("inbox_updated", json)
+            NotificareInboxPluginEventBroker.dispatchEvent("inbox_updated", json)
         } catch (e: Exception) {
             NotificareLogger.error("Failed to emit the inbox_updated event.", e)
         }
@@ -34,20 +37,20 @@ class NotificareInboxPlugin : CordovaPlugin() {
     private val badgeObserver = Observer<Int> { badge ->
         if (badge == null) return@Observer
 
-        NotificareInboxPluginEventManager.dispatchEvent("badge_updated", badge)
+        NotificareInboxPluginEventBroker.dispatchEvent("badge_updated", badge)
     }
 
     override fun pluginInitialize() {
         onMainThread {
-            NotificareInbox.observableItems.observeForever(itemsObserver)
-            NotificareInbox.observableBadge.observeForever(badgeObserver)
+            Notificare.inbox().observableItems.observeForever(itemsObserver)
+            Notificare.inbox().observableBadge.observeForever(badgeObserver)
         }
     }
 
     override fun onDestroy() {
         onMainThread {
-            NotificareInbox.observableItems.removeObserver(itemsObserver)
-            NotificareInbox.observableBadge.removeObserver(badgeObserver)
+            Notificare.inbox().observableItems.removeObserver(itemsObserver)
+            Notificare.inbox().observableBadge.removeObserver(badgeObserver)
         }
     }
 
@@ -62,7 +65,7 @@ class NotificareInboxPlugin : CordovaPlugin() {
             "remove" -> remove(args, callback)
             "clear" -> clear(args, callback)
 
-            // Events
+            // Event broker
             "registerListener" -> registerListener(args, callback)
 
             else -> {
@@ -79,7 +82,7 @@ class NotificareInboxPlugin : CordovaPlugin() {
     private fun getItems(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         try {
             val json = JSONArray()
-            NotificareInbox.items.forEach { json.put(it.toJson()) }
+            Notificare.inbox().items.forEach { json.put(it.toJson()) }
 
             callback.success(json)
         } catch (e: Exception) {
@@ -88,26 +91,23 @@ class NotificareInboxPlugin : CordovaPlugin() {
     }
 
     private fun getBadge(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        callback.success(NotificareInbox.badge)
+        callback.success(Notificare.inbox().badge)
     }
 
     private fun refresh(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareInbox.refresh()
+        Notificare.inbox().refresh()
         callback.void()
     }
 
     private fun open(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val item: NotificareInboxItem
-
-        try {
-            val json = args.getJSONObject(0)
-            item = NotificareInboxItem.fromJson(json)
+        val item: NotificareInboxItem = try {
+            NotificareInboxItem.fromJson(args.getJSONObject(0))
         } catch (e: Exception) {
             callback.error(e.message)
             return
         }
 
-        NotificareInbox.open(item, object : NotificareCallback<NotificareNotification> {
+        Notificare.inbox().open(item, object : NotificareCallback<NotificareNotification> {
             override fun onSuccess(result: NotificareNotification) {
                 try {
                     callback.success(result.toJson())
@@ -123,17 +123,14 @@ class NotificareInboxPlugin : CordovaPlugin() {
     }
 
     private fun markAsRead(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val item: NotificareInboxItem
-
-        try {
-            val json = args.getJSONObject(0)
-            item = NotificareInboxItem.fromJson(json)
+        val item: NotificareInboxItem = try {
+            NotificareInboxItem.fromJson(args.getJSONObject(0))
         } catch (e: Exception) {
             callback.error(e.message)
             return
         }
 
-        NotificareInbox.markAsRead(item, object : NotificareCallback<Unit> {
+        Notificare.inbox().markAsRead(item, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -145,7 +142,7 @@ class NotificareInboxPlugin : CordovaPlugin() {
     }
 
     private fun markAllAsRead(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareInbox.markAllAsRead(object : NotificareCallback<Unit> {
+        Notificare.inbox().markAllAsRead(object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -157,17 +154,14 @@ class NotificareInboxPlugin : CordovaPlugin() {
     }
 
     private fun remove(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val item: NotificareInboxItem
-
-        try {
-            val json = args.getJSONObject(0)
-            item = NotificareInboxItem.fromJson(json)
+        val item: NotificareInboxItem = try {
+            NotificareInboxItem.fromJson(args.getJSONObject(0))
         } catch (e: Exception) {
             callback.error(e.message)
             return
         }
 
-        NotificareInbox.remove(item, object : NotificareCallback<Unit> {
+        Notificare.inbox().remove(item, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -179,7 +173,7 @@ class NotificareInboxPlugin : CordovaPlugin() {
     }
 
     private fun clear(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareInbox.clear(object : NotificareCallback<Unit> {
+        Notificare.inbox().clear(object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -193,11 +187,12 @@ class NotificareInboxPlugin : CordovaPlugin() {
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareInboxPluginEventManager.setup(object : NotificareInboxPluginEventManager.Consumer {
-            override fun onEvent(event: NotificareInboxPluginEventManager.Event) {
+        NotificareInboxPluginEventBroker.setup(object : NotificareInboxPluginEventBroker.Consumer {
+            override fun onEvent(event: NotificareInboxPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)
                 when (event.payload) {
+                    null -> {} // Skip encoding null payloads.
                     is Boolean -> payload.put("data", event.payload)
                     is Int -> payload.put("data", event.payload)
                     is Float -> payload.put("data", event.payload)
@@ -219,22 +214,6 @@ class NotificareInboxPlugin : CordovaPlugin() {
 
 private fun onMainThread(action: () -> Unit) = Handler(Looper.getMainLooper()).post(action)
 
-private fun CordovaArgs.optionalString(index: Int, defaultValue: String? = null): String? {
-    return if (isNull(index)) defaultValue else getString(index)
-}
-
-private fun CallbackContext.success(b: Boolean) {
-    sendPluginResult(PluginResult(PluginResult.Status.OK, b))
-}
-
 private fun CallbackContext.void() {
     sendPluginResult(PluginResult(PluginResult.Status.OK, null as String?))
-}
-
-private fun CallbackContext.nullableSuccess(json: JSONObject?) {
-    if (json == null) {
-        void()
-    } else {
-        success(json)
-    }
 }

@@ -18,7 +18,7 @@
             <preference name="AndroidXEnabled" value="true" />
 
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <preference name="GradlePluginKotlinVersion" value="1.5.10" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/widget">
@@ -36,7 +36,7 @@
         </config-file>
 
         <source-file src="src/android/NotificareInboxPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/inbox/cordova" />
-        <source-file src="src/android/NotificareInboxPluginEventManager.kt" target-dir="app/src/main/kotlin/re/notifica/inbox/cordova" />
+        <source-file src="src/android/NotificareInboxPluginEventBroker.kt" target-dir="app/src/main/kotlin/re/notifica/inbox/cordova" />
 
         <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />
     </platform>
@@ -50,14 +50,14 @@
         </config-file>
 
         <source-file src="src/ios/NotificareInboxPlugin.swift" />
-        <source-file src="src/ios/NotificareInboxPluginEventManager.swift" />
+        <source-file src="src/ios/NotificareInboxPluginEventBroker.swift" />
 
         <podspec>
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareInboxKit" spec="3.0.0-alpha.1" />
+                <pod name="Notificare/NotificareInboxKit" spec="3.0.0-beta.2" />
             </pods>
         </podspec>
     </platform>

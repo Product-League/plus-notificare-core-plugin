@@ -108,6 +108,42 @@ function onDeviceReady() {
 
       console.log(`---> Badge = ${await NotificareInbox.getBadge()}`);
       console.log(`---> Items = ${(await NotificareInbox.getItems()).length}`);
+
+      //
+      // Assets
+      //
+
+      const assets = await NotificareAssets.fetch('LANDSCAPES');
+      console.log('---> Assets');
+      console.log(JSON.stringify(assets, null, 2));
+
+      //
+      // Geo
+      //
+
+      console.log(`---> Location services enabled = ${await NotificareGeo.hasLocationServicesEnabled()}`);
+      console.log(`---> Bluetooth enabled = ${await NotificareGeo.hasBluetoothEnabled()}`);
+      await NotificareGeo.enableLocationUpdates();
+
+      //
+      // Loyalty
+      //
+
+      const pass = await NotificareLoyalty.fetchPassBySerial('520d974e-b3d5-4d30-93b4-259f9d4bfa1d');
+      console.log('=== FETCH PASS ===');
+      console.log(JSON.stringify(pass, null, 2));
+
+      // await NotificareLoyalty.present(pass);
+
+      //
+      // Scannables
+      //
+
+      // if (await NotificareScannables.canStartNfcScannableSession()) {
+      //   await NotificareScannables.startNfcScannableSession();
+      // } else {
+      //   await NotificareScannables.startQrCodeScannableSession();
+      // }
     });
 
     NotificarePush.onNotificationReceived((notification) => {
@@ -118,6 +154,11 @@ function onDeviceReady() {
       console.log(`---> Opened notification = ${JSON.stringify(notification)}`);
 
       await NotificarePushUI.presentNotification(notification);
+    });
+
+    NotificarePush.onNotificationSettingsChanged((granted) => {
+      console.log('=== NOTIFICATION SETTINGS CHANGED ===');
+      console.log(JSON.stringify(granted, null, 2));
     });
 
     NotificareInbox.onBadgeUpdated((badge) => {
@@ -176,6 +217,60 @@ function onDeviceReady() {
     NotificarePushUI.onCustomActionReceived((data) => {
       console.log('=== CUSTOM ACTION RECEIVED ===');
       console.log(JSON.stringify(data));
+    });
+
+    NotificareGeo.onLocationUpdated((location) => {
+      console.log('=== LOCATION UPDATED ===');
+      console.log(JSON.stringify(location, null, 2));
+    });
+
+    NotificareGeo.onRegionEntered((region) => {
+      console.log('=== REGION ENTERED ===');
+      console.log(JSON.stringify(region, null, 2));
+    });
+
+    NotificareGeo.onRegionExited((region) => {
+      console.log('=== REGION EXITED ===');
+      console.log(JSON.stringify(region, null, 2));
+    });
+
+    NotificareGeo.onBeaconEntered((beacon) => {
+      console.log('=== BEACON ENTERED ===');
+      console.log(JSON.stringify(beacon, null, 2));
+    });
+
+    NotificareGeo.onBeaconExited((beacon) => {
+      console.log('=== BEACON EXITED ===');
+      console.log(JSON.stringify(beacon, null, 2));
+    });
+
+    NotificareGeo.onBeaconsRanged(({ region, beacons }) => {
+      console.log('=== BEACONS RANGED ===');
+      console.log(JSON.stringify({ region, beacons }, null, 2));
+    });
+
+    NotificareGeo.onVisit((visit) => {
+      console.log('=== VISIT ===');
+      console.log(JSON.stringify(visit, null, 2));
+    });
+
+    NotificareGeo.onHeadingUpdated((heading) => {
+      console.log('=== HEADING UPDATED ===');
+      console.log(JSON.stringify(heading, null, 2));
+    });
+
+    NotificareScannables.onScannableDetected(async (scannable) => {
+      console.log('=== SCANNABLE DETECTED ===');
+      console.log(JSON.stringify(scannable, null, 2));
+
+      if (scannable.notification != null) {
+        await NotificarePushUI.presentNotification(scannable.notification);
+      }
+    });
+
+    NotificareScannables.onScannableSessionFailed((error) => {
+      console.log('=== SCANNABLE SESSION FAILED ===');
+      console.log(JSON.stringify(error, null, 2));
     });
   })();
 }

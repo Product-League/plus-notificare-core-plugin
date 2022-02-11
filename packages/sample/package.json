@@ -6,17 +6,9 @@
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "link-packages": "run-s link-packages:notificare link-packages:notificare-inbox link-packages:notificare-push link-packages:notificare-push-ui",
-    "link-packages:notificare": "cordova plugin add ../notificare --link",
-    "link-packages:notificare-inbox": "cordova plugin add ../notificare-inbox --link",
-    "link-packages:notificare-push": "cordova plugin add ../notificare-push --link",
-    "link-packages:notificare-push-ui": "cordova plugin add ../notificare-push-ui --link",
-    "unlink-packages": "run-s unlink-packages:notificare unlink-packages:notificare-inbox unlink-packages:notificare-push unlink-packages:notificare-push-ui",
-    "unlink-packages:notificare": "cordova plugin remove cordova-plugin-notificare",
-    "unlink-packages:notificare-inbox": "cordova plugin remove cordova-plugin-notificare-inbox",
-    "unlink-packages:notificare-push": "cordova plugin remove cordova-plugin-notificare-push",
-    "unlink-packages:notificare-push-ui": "cordova plugin remove cordova-plugin-notificare-push-ui"
+    "cordova:remove-platforms": "rm -rf platforms plugins",
+    "cordova:add-android": "cordova platform add android; cd platforms/android; gradle wrapper",
+    "cordova:add-ios": "cordova platform add ios; cd platforms/ios; pod install"
   },
   "keywords": [
     "ecosystem:cordova"
@@ -24,15 +16,14 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
-    "cordova-android": "^9.1.0",
+    "cordova-android": "^10.1.1",
     "cordova-ios": "^6.2.0",
     "cordova-plugin-notificare": "^3.0.0-beta.2",
     "cordova-plugin-notificare-inbox": "^3.0.0-beta.2",
     "cordova-plugin-notificare-push": "^3.0.0-beta.2",
     "cordova-plugin-notificare-push-ui": "^3.0.0-beta.2",
     "cordova-plugin-whitelist": "^1.3.4",
-    "ios-deploy": "^1.11.4",
-    "npm-run-all": "^4.1.5"
+    "ios-deploy": "^1.11.4"
   },
   "cordova": {
     "plugins": {

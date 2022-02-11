@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedVariable
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -22,160 +24,158 @@
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
-    // Cordova is now initialized. Have fun!
+  // Cordova is now initialized. Have fun!
 
-    console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    document.getElementById('deviceready').classList.add('ready');
+  console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
+  document.getElementById('deviceready').classList.add('ready');
 
-    (async () => {
-        await Notificare.setUseAdvancedLogging(true);
+  (async () => {
+    console.log(`Is configured = ${await Notificare.isConfigured()}`);
+    console.log(`Is ready = ${await Notificare.isReady()}`);
 
-        console.log(`Is configured = ${await Notificare.isConfigured()}`)
-        console.log(`Is ready = ${await Notificare.isReady()}`)
+    await Notificare.launch();
 
-        await Notificare.launch();
+    Notificare.onDeviceRegistered((device) => {
+      console.log(`---> Device registered: ${JSON.stringify(device)}`);
+    });
 
-        Notificare.onDeviceRegistered((device) => {
-            console.log(`---> Device registered: ${JSON.stringify(device)}`);
-        });
+    Notificare.onReady(async (application) => {
+      console.log('=======================');
+      console.log('= NOTIFICARE IS READY =');
+      console.log('=======================');
+      console.log(JSON.stringify(application));
 
-        Notificare.onReady(async (application) => {
-            console.log('=======================');
-            console.log('= NOTIFICARE IS READY =')
-            console.log('=======================');
-            console.log(JSON.stringify(application));
+      // Stop listening to device_registered events.
+      // sub.remove();
 
-            // Stop listening to device_registered events.
-            // sub.remove();
+      await Notificare.events().logCustom('CUSTOM_EVENT');
+      await Notificare.events().logCustom('CUSTOM_EVENT', {
+        color: 'blue',
+        lovesNotificare: true,
+        nested: {
+          works: true,
+          list: ['a', 'b', 'c'],
+        },
+      });
 
-            await Notificare.eventsManager.logCustom('CUSTOM_EVENT');
-            await Notificare.eventsManager.logCustom('CUSTOM_EVENT', {
-                color: 'blue',
-                lovesNotificare: true,
-                nested: {
-                    works: true,
-                    list: ['a', 'b', 'c'],
-                },
-            });
+      setTimeout(async function register() {
+        await Notificare.device().register(null, null);
+      }, 2000);
 
-            setTimeout(async function register() {
-                await Notificare.deviceManager.register(null, null);
-            }, 2000);
+      setTimeout(async function registerAnonymous() {
+        await Notificare.device().register('helder@notifica.re', 'Helder Pinhal');
+      }, 5000);
 
-            setTimeout(async function registerAnonymous() {
-                await Notificare.deviceManager.register('helder@notifica.re', 'Helder Pinhal');
-            }, 5000);
+      console.log(`---> Tags = ${JSON.stringify(await Notificare.device().fetchTags())}`);
+      await Notificare.device().addTags(['cordova', 'hpinhal']);
+      console.log(`---> Tags = ${JSON.stringify(await Notificare.device().fetchTags())}`);
+      await Notificare.device().removeTag('hpinhal');
+      console.log(`---> Tags = ${JSON.stringify(await Notificare.device().fetchTags())}`);
+      await Notificare.device().clearTags();
+      console.log(`---> Tags = ${JSON.stringify(await Notificare.device().fetchTags())}`);
 
-            console.log(`---> Tags = ${JSON.stringify(await Notificare.deviceManager.fetchTags())}`);
-            await Notificare.deviceManager.addTags(['cordova', 'hpinhal'])
-            console.log(`---> Tags = ${JSON.stringify(await Notificare.deviceManager.fetchTags())}`);
-            await Notificare.deviceManager.removeTag('hpinhal');
-            console.log(`---> Tags = ${JSON.stringify(await Notificare.deviceManager.fetchTags())}`);
-            await Notificare.deviceManager.clearTags();
-            console.log(`---> Tags = ${JSON.stringify(await Notificare.deviceManager.fetchTags())}`);
+      console.log(`---> Language = ${JSON.stringify(await Notificare.device().getPreferredLanguage())}`);
+      await Notificare.device().updatePreferredLanguage('nl-NL');
+      console.log(`---> Language = ${JSON.stringify(await Notificare.device().getPreferredLanguage())}`);
+      await Notificare.device().updatePreferredLanguage(null);
+      console.log(`---> Language = ${JSON.stringify(await Notificare.device().getPreferredLanguage())}`);
 
-            console.log(`---> Language = ${JSON.stringify(await Notificare.deviceManager.getPreferredLanguage())}`);
-            await Notificare.deviceManager.updatePreferredLanguage('nl-NL');
-            console.log(`---> Language = ${JSON.stringify(await Notificare.deviceManager.getPreferredLanguage())}`);
-            await Notificare.deviceManager.updatePreferredLanguage(null);
-            console.log(`---> Language = ${JSON.stringify(await Notificare.deviceManager.getPreferredLanguage())}`);
+      console.log(`---> DnD = ${JSON.stringify(await Notificare.device().fetchDoNotDisturb())}`);
+      await Notificare.device().updateDoNotDisturb({ start: '23:00', end: '08:00' });
+      console.log(`---> DnD = ${JSON.stringify(await Notificare.device().fetchDoNotDisturb())}`);
+      await Notificare.device().clearDoNotDisturb();
+      console.log(`---> DnD = ${JSON.stringify(await Notificare.device().fetchDoNotDisturb())}`);
 
-            console.log(`---> DnD = ${JSON.stringify(await Notificare.deviceManager.fetchDoNotDisturb())}`);
-            await Notificare.deviceManager.updateDoNotDisturb({ start: '23:00', end: '08:00' });
-            console.log(`---> DnD = ${JSON.stringify(await Notificare.deviceManager.fetchDoNotDisturb())}`);
-            await Notificare.deviceManager.clearDoNotDisturb();
-            console.log(`---> DnD = ${JSON.stringify(await Notificare.deviceManager.fetchDoNotDisturb())}`);
+      console.log(`---> User data = ${JSON.stringify(await Notificare.device().fetchUserData())}`);
+      await Notificare.device().updateUserData({ firstName: 'Helder', lastName: 'Pinhal' });
+      console.log(`---> User data = ${JSON.stringify(await Notificare.device().fetchUserData())}`);
+      await Notificare.device().updateUserData({});
+      console.log(`---> User data = ${JSON.stringify(await Notificare.device().fetchUserData())}`);
 
-            console.log(`---> User data = ${JSON.stringify(await Notificare.deviceManager.fetchUserData())}`);
-            await Notificare.deviceManager.updateUserData({ firstName: 'Helder', lastName: 'Pinhal' });
-            console.log(`---> User data = ${JSON.stringify(await Notificare.deviceManager.fetchUserData())}`);
-            await Notificare.deviceManager.updateUserData({});
-            console.log(`---> User data = ${JSON.stringify(await Notificare.deviceManager.fetchUserData())}`);
+      //
+      // Push
+      //
 
-            //
-            // Push
-            //
+      console.log(`---> Remote notifications enabled = ${await NotificarePush.hasRemoteNotificationsEnabled()}`);
+      await NotificarePush.enableRemoteNotifications();
+      console.log(`---> Remote notifications enabled = ${await NotificarePush.hasRemoteNotificationsEnabled()}`);
 
-            console.log(`---> Remote notifications enabled = ${await NotificarePush.isRemoteNotificationsEnabled()}`);
-            await NotificarePush.enableRemoteNotifications();
-            console.log(`---> Remote notifications enabled = ${await NotificarePush.isRemoteNotificationsEnabled()}`);
+      await NotificarePush.setPresentationOptions(['alert', 'sound', 'badge']);
 
-            await NotificarePush.setPresentationOptions(['alert', 'sound', 'badge']);
+      //
+      // Inbox
+      //
 
-            //
-            // Inbox
-            //
+      console.log(`---> Badge = ${await NotificareInbox.getBadge()}`);
+      console.log(`---> Items = ${(await NotificareInbox.getItems()).length}`);
+    });
 
-            console.log(`---> Badge = ${await NotificareInbox.getBadge()}`);
-            console.log(`---> Items = ${(await NotificareInbox.getItems()).length}`);
-        });
+    NotificarePush.onNotificationReceived((notification) => {
+      console.log(`---> Received notification = ${JSON.stringify(notification)}`);
+    });
 
-        NotificarePush.onNotificationReceived((notification) => {
-            console.log(`---> Received notification = ${JSON.stringify(notification)}`);
-        });
+    NotificarePush.onNotificationOpened(async (notification) => {
+      console.log(`---> Opened notification = ${JSON.stringify(notification)}`);
 
-        NotificarePush.onNotificationOpened(async (notification) => {
-            console.log(`---> Opened notification = ${JSON.stringify(notification)}`);
+      await NotificarePushUI.presentNotification(notification);
+    });
 
-            await NotificarePushUI.presentNotification(notification);
-        });
+    NotificareInbox.onBadgeUpdated((badge) => {
+      console.log(`---> Badge updated = ${badge}`);
+    });
 
-        NotificareInbox.onBadgeUpdated((badge) => {
-            console.log(`---> Badge updated = ${badge}`);
-        });
+    NotificareInbox.onInboxUpdated((items) => {
+      console.log(`---> Inbox updated = ${JSON.stringify(items)}`);
+    });
 
-        NotificareInbox.onInboxUpdated((items) => {
-            console.log(`---> Inbox updated = ${JSON.stringify(items)}`);
-        });
+    NotificarePushUI.onNotificationWillPresent((notification) => {
+      console.log('=== NOTIFICATION WILL PRESENT ===');
+      console.log(JSON.stringify(notification));
+    });
 
-        NotificarePushUI.onNotificationWillPresent((notification) => {
-            console.log('=== NOTIFICATION WILL PRESENT ===');
-            console.log(JSON.stringify(notification));
-        });
+    NotificarePushUI.onNotificationPresented((notification) => {
+      console.log('=== NOTIFICATION PRESENTED ===');
+      console.log(JSON.stringify(notification));
+    });
 
-        NotificarePushUI.onNotificationPresented((notification) => {
-            console.log('=== NOTIFICATION PRESENTED ===');
-            console.log(JSON.stringify(notification));
-        });
+    NotificarePushUI.onNotificationFinishedPresenting((notification) => {
+      console.log('=== NOTIFICATION FINISHED PRESENTING ===');
+      console.log(JSON.stringify(notification));
+    });
 
-        NotificarePushUI.onNotificationFinishedPresenting((notification) => {
-            console.log('=== NOTIFICATION FINISHED PRESENTING ===');
-            console.log(JSON.stringify(notification));
-        });
+    NotificarePushUI.onNotificationFailedToPresent((notification) => {
+      console.log('=== NOTIFICATION FAILED TO PRESENT ===');
+      console.log(JSON.stringify(notification));
+    });
 
-        NotificarePushUI.onNotificationFailedToPresent((notification) => {
-            console.log('=== NOTIFICATION FAILED TO PRESENT ===');
-            console.log(JSON.stringify(notification));
-        });
+    NotificarePushUI.onNotificationUrlClicked((data) => {
+      console.log('=== NOTIFICATION URL CLICKED ===');
+      console.log(JSON.stringify(data));
+    });
 
-        NotificarePushUI.onNotificationUrlClicked((data) => {
-            console.log('=== NOTIFICATION URL CLICKED ===');
-            console.log(JSON.stringify(data));
-        });
+    NotificarePushUI.onActionWillExecute((data) => {
+      console.log('=== ACTION WILL EXECUTE ===');
+      console.log(JSON.stringify(data));
+    });
 
-        NotificarePushUI.onActionWillExecute((data) => {
-            console.log('=== ACTION WILL EXECUTE ===');
-            console.log(JSON.stringify(data));
-        });
+    NotificarePushUI.onActionExecuted((data) => {
+      console.log('=== ACTION EXECUTED ===');
+      console.log(JSON.stringify(data));
+    });
 
-        NotificarePushUI.onActionExecuted((data) => {
-            console.log('=== ACTION EXECUTED ===');
-            console.log(JSON.stringify(data));
-        });
+    NotificarePushUI.onActionNotExecuted((data) => {
+      console.log('=== ACTION NOT EXECUTED ===');
+      console.log(JSON.stringify(data));
+    });
 
-        NotificarePushUI.onActionNotExecuted((data) => {
-            console.log('=== ACTION NOT EXECUTED ===');
-            console.log(JSON.stringify(data));
-        });
+    NotificarePushUI.onActionFailedToExecute((data) => {
+      console.log('=== ACTION FAILED TO EXECUTE ===');
+      console.log(JSON.stringify(data));
+    });
 
-        NotificarePushUI.onActionFailedToExecute((data) => {
-            console.log('=== ACTION FAILED TO EXECUTE ===');
-            console.log(JSON.stringify(data));
-        });
-
-        NotificarePushUI.onCustomActionReceived((url) => {
-            console.log('=== CUSTOM ACTION RECEIVED ===');
-            console.log(JSON.stringify(url));
-        });
-    })();
+    NotificarePushUI.onCustomActionReceived((data) => {
+      console.log('=== CUSTOM ACTION RECEIVED ===');
+      console.log(JSON.stringify(data));
+    });
+  })();
 }

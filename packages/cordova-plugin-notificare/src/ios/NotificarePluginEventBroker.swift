@@ -1,6 +1,6 @@
 import NotificareKit
 
-class NotificarePluginEventManager {
+class NotificarePluginEventBroker {
 
     typealias Consumer = (_ event: Event) -> Void
 
@@ -17,7 +17,7 @@ class NotificarePluginEventManager {
         }
     }
 
-    static func dispatchEvent(name: String, payload: Any) {
+    static func dispatchEvent(name: String, payload: Any?) {
         let event = Event(name: name, payload: payload)
 
         guard let consumer = consumer else {
@@ -32,6 +32,6 @@ class NotificarePluginEventManager {
 
     struct Event {
         let name: String
-        let payload: Any
+        let payload: Any?
     }
 }

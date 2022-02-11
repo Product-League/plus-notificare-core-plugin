@@ -1,80 +1,85 @@
-import { NotificareDeviceManager } from './notificare-device-manager';
-import { NotificareEventsManager } from './notificare-events-manager';
+import { NotificareDeviceModule } from './notificare-device-module';
+import { NotificareEventsModule } from './notificare-events-module';
 import { EventSubscription } from './events';
-import { NotificareApplication, NotificareNotification } from './models';
-import { Nullable } from './utils';
+import { NotificareApplication } from './models/notificare-application';
+import { NotificareNotification } from './models/notificare-notification';
+import { NotificareDevice } from './models/notificare-device';
 
 export class Notificare {
+  private static readonly deviceModule = new NotificareDeviceModule();
+  private static readonly eventsModule = new NotificareEventsModule();
+
+  //
   // Modules
-  static readonly deviceManager = NotificareDeviceManager;
-  static readonly eventsManager = NotificareEventsManager;
+  //
 
-  // Functions
-  static isConfigured(): Promise<boolean> {
+  public static device(): NotificareDeviceModule {
+    return this.deviceModule;
+  }
+
+  public static events(): NotificareEventsModule {
+    return this.eventsModule;
+  }
+
+  //
+  // Methods
+  //
+
+  public static async isConfigured(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      cordova.exec(resolve, reject, 'Notificare', 'getConfigured', []);
+      cordova.exec(resolve, reject, 'Notificare', 'isConfigured', []);
     });
   }
 
-  static isReady(): Promise<boolean> {
+  public static async isReady(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      cordova.exec(resolve, reject, 'Notificare', 'getReady', []);
+      cordova.exec(resolve, reject, 'Notificare', 'isReady', []);
     });
   }
 
-  static async getUseAdvancedLogging(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      cordova.exec(resolve, reject, 'Notificare', 'getUseAdvancedLogging', []);
-    });
-  }
-
-  static async setUseAdvancedLogging(useAdvancedLogging: boolean): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      cordova.exec(resolve, reject, 'Notificare', 'setUseAdvancedLogging', [useAdvancedLogging]);
-    });
-  }
-
-  static configure(applicationKey: string, applicationSecret: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      cordova.exec(resolve, reject, 'Notificare', 'configure', [applicationKey, applicationSecret]);
-    });
-  }
-
-  static launch(): Promise<void> {
+  public static async launch(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'launch', []);
     });
   }
 
-  static unlaunch(): Promise<void> {
+  public static async unlaunch(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'unlaunch', []);
     });
   }
 
-  static async getApplication(): Promise<Nullable<NotificareApplication>> {
+  public static async getApplication(): Promise<NotificareApplication | null> {
     return new Promise<NotificareApplication>((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'getApplication', []);
     });
   }
 
-  static async fetchApplication(): Promise<NotificareApplication> {
+  public static async fetchApplication(): Promise<NotificareApplication> {
     return new Promise<NotificareApplication>((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'fetchApplication', []);
     });
   }
 
-  static async fetchNotification(id: string): Promise<NotificareNotification> {
+  public static async fetchNotification(id: string): Promise<NotificareNotification> {
     return new Promise<NotificareNotification>((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'fetchNotification', [id]);
     });
   }
 
+  //
+  // Events
+  //
+
   static onReady(callback: (application: NotificareApplication) => void): EventSubscription {
     return new EventSubscription('ready', callback);
   }
 
-  static onDeviceRegistered(callback: (application: NotificareApplication) => void): EventSubscription {
+  static onUnlaunched(callback: () => void): EventSubscription {
+    return new EventSubscription('unlaunched', callback);
+  }
+
+  static onDeviceRegistered(callback: (device: NotificareDevice) => void): EventSubscription {
     return new EventSubscription('device_registered', callback);
   }
 

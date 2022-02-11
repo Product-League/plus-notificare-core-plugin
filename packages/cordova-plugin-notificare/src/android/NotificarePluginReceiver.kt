@@ -1,23 +1,28 @@
 package re.notifica.cordova
 
+import android.content.Context
 import re.notifica.NotificareIntentReceiver
-import re.notifica.NotificareLogger
+import re.notifica.internal.NotificareLogger
 import re.notifica.models.NotificareApplication
 import re.notifica.models.NotificareDevice
 
 class NotificarePluginReceiver : NotificareIntentReceiver() {
 
-    override fun onReady(application: NotificareApplication) {
+    override fun onReady(context: Context, application: NotificareApplication) {
         try {
-            NotificarePluginEventManager.dispatchEvent("ready", application.toJson())
+            NotificarePluginEventBroker.dispatchEvent("ready", application.toJson())
         } catch (e: Exception) {
             NotificareLogger.error("Failed to emit the ready event.", e)
         }
     }
 
-    override fun onDeviceRegistered(device: NotificareDevice) {
+    override fun onUnlaunched(context: Context) {
+        NotificarePluginEventBroker.dispatchEvent("unlaunched", null)
+    }
+
+    override fun onDeviceRegistered(context: Context, device: NotificareDevice) {
         try {
-            NotificarePluginEventManager.dispatchEvent("device_registered", device.toJson())
+            NotificarePluginEventBroker.dispatchEvent("device_registered", device.toJson())
         } catch (e: Exception) {
             NotificareLogger.error("Failed to emit the device_registered event.", e)
         }

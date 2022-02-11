@@ -1,93 +1,92 @@
-import * as cordova from 'cordova';
-import { NotificareDevice, NotificareDoNotDisturb } from './models';
-import { Nullable } from './utils';
+import { NotificareDevice } from './models/notificare-device';
+import { NotificareDoNotDisturb } from './models/notificare-do-not-disturb';
 
-export class NotificareDeviceManager {
-  static getCurrentDevice(): Promise<NotificareDevice> {
+export class NotificareDeviceModule {
+  public async getCurrentDevice(): Promise<NotificareDevice | null> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'getCurrentDevice', []);
     });
   }
 
-  static register(userId: Nullable<string>, userName: Nullable<string>): Promise<void> {
-    return new Promise((resolve, reject) => {
-      cordova.exec(resolve, reject, 'Notificare', 'register', [userId, userName]);
-    });
-  }
-
-  static getPreferredLanguage(): Promise<Nullable<string>> {
+  public async getPreferredLanguage(): Promise<string | null> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'getPreferredLanguage', []);
     });
   }
 
-  static updatePreferredLanguage(language: Nullable<string>): Promise<void> {
+  public async updatePreferredLanguage(language: string | null): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'updatePreferredLanguage', [language]);
     });
   }
 
-  static fetchTags(): Promise<string[]> {
+  public async register(userId: string | null, userName: string | null): Promise<void> {
+    return new Promise((resolve, reject) => {
+      cordova.exec(resolve, reject, 'Notificare', 'register', [userId, userName]);
+    });
+  }
+
+  public async fetchTags(): Promise<string[]> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'fetchTags', []);
     });
   }
 
-  static addTag(tag: string): Promise<void> {
+  public async addTag(tag: string): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'addTag', [tag]);
     });
   }
 
-  static addTags(tags: string[]): Promise<void> {
+  public async addTags(tags: string[]): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'addTags', [tags]);
     });
   }
 
-  static removeTag(tag: string): Promise<void> {
+  public async removeTag(tag: string): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'removeTag', [tag]);
     });
   }
 
-  static removeTags(tags: string[]): Promise<void> {
+  public async removeTags(tags: string[]): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'removeTags', [tags]);
     });
   }
 
-  static clearTags(): Promise<void> {
+  public async clearTags(): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'clearTags', []);
     });
   }
 
-  static fetchDoNotDisturb(): Promise<Nullable<NotificareDoNotDisturb>> {
+  public async fetchDoNotDisturb(): Promise<NotificareDoNotDisturb | null> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'fetchDoNotDisturb', []);
     });
   }
 
-  static updateDoNotDisturb(dnd: NotificareDoNotDisturb): Promise<void> {
+  public async updateDoNotDisturb(dnd: NotificareDoNotDisturb): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'updateDoNotDisturb', [dnd]);
     });
   }
 
-  static clearDoNotDisturb(): Promise<void> {
+  public async clearDoNotDisturb(): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'clearDoNotDisturb', []);
     });
   }
 
-  static fetchUserData(): Promise<Nullable<Record<string, string>>> {
+  public async fetchUserData(): Promise<Record<string, string>> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'fetchUserData', []);
     });
   }
 
-  static updateUserData(userData: Record<string, string>): Promise<void> {
+  public async updateUserData(userData: Record<string, string>): Promise<void> {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'updateUserData', [userData]);
     });

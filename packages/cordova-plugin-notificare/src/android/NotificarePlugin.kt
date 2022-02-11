@@ -9,6 +9,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import re.notifica.Notificare
 import re.notifica.NotificareCallback
+import re.notifica.ktx.device
+import re.notifica.ktx.events
 import re.notifica.models.*
 
 class NotificarePlugin : CordovaPlugin() {
@@ -29,25 +31,22 @@ class NotificarePlugin : CordovaPlugin() {
 
         val url = intent.data?.toString()
         if (url != null) {
-            NotificarePluginEventManager.dispatchEvent("url_opened", url)
+            NotificarePluginEventBroker.dispatchEvent("url_opened", url)
         }
     }
 
     override fun execute(action: String, args: CordovaArgs, callback: CallbackContext): Boolean {
         when (action) {
-            // Notificare
-            "getConfigured" -> getConfigured(args, callback)
-            "getReady" -> getReady(args, callback)
-            "getUseAdvancedLogging" -> getUseAdvancedLogging(args, callback)
-            "setUseAdvancedLogging" -> setUseAdvancedLogging(args, callback)
-            "configure" -> configure(args, callback)
+            "isConfigured" -> isConfigured(args, callback)
+            "isReady" -> isReady(args, callback)
             "launch" -> launch(args, callback)
             "unlaunch" -> unlaunch(args, callback)
             "getApplication" -> getApplication(args, callback)
             "fetchApplication" -> fetchApplication(args, callback)
             "fetchNotification" -> fetchNotification(args, callback)
-
-            // Device Manager
+            //
+            // Device
+            //
             "getCurrentDevice" -> getCurrentDevice(args, callback)
             "register" -> register(args, callback)
             "fetchTags" -> fetchTags(args, callback)
@@ -63,11 +62,13 @@ class NotificarePlugin : CordovaPlugin() {
             "clearDoNotDisturb" -> clearDoNotDisturb(args, callback)
             "fetchUserData" -> fetchUserData(args, callback)
             "updateUserData" -> updateUserData(args, callback)
-
-            // Events Manager
-            "logCustom" -> logCustom(args, callback)
-
+            //
             // Events
+            //
+            "logCustom" -> logCustom(args, callback)
+            //
+            // Event broker
+            //
             "registerListener" -> registerListener(args, callback)
 
             else -> {
@@ -81,29 +82,12 @@ class NotificarePlugin : CordovaPlugin() {
 
     // region Notificare
 
-    private fun getConfigured(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
+    private fun isConfigured(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         callback.success(Notificare.isConfigured)
     }
 
-    private fun getReady(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
+    private fun isReady(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         callback.success(Notificare.isReady)
-    }
-
-    private fun configure(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val applicationKey = args.getString(0)
-        val applicationSecret = args.getString(1)
-
-        Notificare.configure(cordova.context, applicationKey, applicationSecret)
-        callback.void()
-    }
-
-    private fun getUseAdvancedLogging(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        callback.success(Notificare.useAdvancedLogging)
-    }
-
-    private fun setUseAdvancedLogging(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        Notificare.useAdvancedLogging = args.getBoolean(0)
-        callback.void()
     }
 
     private fun launch(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
@@ -117,13 +101,21 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun getApplication(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        callback.nullableSuccess(Notificare.application?.toJson())
+        try {
+            callback.nullableSuccess(Notificare.application?.toJson())
+        } catch (e: Exception) {
+            callback.error(e.message)
+        }
     }
 
     private fun fetchApplication(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         Notificare.fetchApplication(object : NotificareCallback<NotificareApplication> {
             override fun onSuccess(result: NotificareApplication) {
-                callback.success(result.toJson())
+                try {
+                    callback.success(result.toJson())
+                } catch (e: Exception) {
+                    callback.error(e.message)
+                }
             }
 
             override fun onFailure(e: Exception) {
@@ -137,7 +129,11 @@ class NotificarePlugin : CordovaPlugin() {
 
         Notificare.fetchNotification(id, object : NotificareCallback<NotificareNotification> {
             override fun onSuccess(result: NotificareNotification) {
-                callback.success(result.toJson())
+                try {
+                    callback.success(result.toJson())
+                } catch (e: Exception) {
+                    callback.error(e.message)
+                }
             }
 
             override fun onFailure(e: Exception) {
@@ -151,14 +147,18 @@ class NotificarePlugin : CordovaPlugin() {
     // region Notificare Device Manager
 
     private fun getCurrentDevice(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        callback.nullableSuccess(Notificare.deviceManager.currentDevice?.toJson())
+        try {
+            callback.nullableSuccess(Notificare.device().currentDevice?.toJson())
+        } catch (e: Exception) {
+            callback.error(e.message)
+        }
     }
 
     private fun register(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         val userId: String? = args.optionalString(0)
         val userName: String? = args.optionalString(1)
 
-        Notificare.deviceManager.register(userId, userName, object : NotificareCallback<Unit> {
+        Notificare.device().register(userId, userName, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -170,12 +170,16 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun fetchTags(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        Notificare.deviceManager.fetchTags(object : NotificareCallback<List<String>> {
+        Notificare.device().fetchTags(object : NotificareCallback<List<String>> {
             override fun onSuccess(result: List<String>) {
-                val json = JSONArray()
-                result.forEach { json.put(it) }
+                try {
+                    val json = JSONArray()
+                    result.forEach { json.put(it) }
 
-                callback.success(json)
+                    callback.success(json)
+                } catch (e: Exception) {
+                    callback.error(e.message)
+                }
             }
 
             override fun onFailure(e: Exception) {
@@ -187,7 +191,7 @@ class NotificarePlugin : CordovaPlugin() {
     private fun addTag(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         val tag = args.getString(0)
 
-        Notificare.deviceManager.addTag(tag, object : NotificareCallback<Unit> {
+        Notificare.device().addTag(tag, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -206,7 +210,7 @@ class NotificarePlugin : CordovaPlugin() {
             tags.add(json.getString(i))
         }
 
-        Notificare.deviceManager.addTags(tags, object : NotificareCallback<Unit> {
+        Notificare.device().addTags(tags, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -220,7 +224,7 @@ class NotificarePlugin : CordovaPlugin() {
     private fun removeTag(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         val tag = args.getString(0)
 
-        Notificare.deviceManager.removeTag(tag, object : NotificareCallback<Unit> {
+        Notificare.device().removeTag(tag, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -239,7 +243,7 @@ class NotificarePlugin : CordovaPlugin() {
             tags.add(json.getString(i))
         }
 
-        Notificare.deviceManager.removeTags(tags, object : NotificareCallback<Unit> {
+        Notificare.device().removeTags(tags, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -251,7 +255,7 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun clearTags(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        Notificare.deviceManager.clearTags(object : NotificareCallback<Unit> {
+        Notificare.device().clearTags(object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -263,13 +267,13 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun getPreferredLanguage(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        callback.success(Notificare.deviceManager.preferredLanguage)
+        callback.nullableSuccess(Notificare.device().preferredLanguage)
     }
 
     private fun updatePreferredLanguage(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         val language: String? = args.optionalString(0)
 
-        Notificare.deviceManager.updatePreferredLanguage(language, object : NotificareCallback<Unit> {
+        Notificare.device().updatePreferredLanguage(language, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -281,9 +285,13 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun fetchDoNotDisturb(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        Notificare.deviceManager.fetchDoNotDisturb(object : NotificareCallback<NotificareDoNotDisturb?> {
+        Notificare.device().fetchDoNotDisturb(object : NotificareCallback<NotificareDoNotDisturb?> {
             override fun onSuccess(result: NotificareDoNotDisturb?) {
-                callback.nullableSuccess(result?.toJson())
+                try {
+                    callback.nullableSuccess(result?.toJson())
+                } catch (e: Exception) {
+                    callback.error(e.message)
+                }
             }
 
             override fun onFailure(e: Exception) {
@@ -293,9 +301,14 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun updateDoNotDisturb(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val dnd = NotificareDoNotDisturb.fromJson(args.getJSONObject(0))
+        val dnd: NotificareDoNotDisturb = try {
+            NotificareDoNotDisturb.fromJson(args.getJSONObject(0))
+        } catch (e: Exception) {
+            callback.error(e.message)
+            return
+        }
 
-        Notificare.deviceManager.updateDoNotDisturb(dnd, object : NotificareCallback<Unit> {
+        Notificare.device().updateDoNotDisturb(dnd, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -307,7 +320,7 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun clearDoNotDisturb(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        Notificare.deviceManager.clearDoNotDisturb(object : NotificareCallback<Unit> {
+        Notificare.device().clearDoNotDisturb(object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -319,12 +332,16 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun fetchUserData(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        Notificare.deviceManager.fetchUserData(object : NotificareCallback<NotificareUserData> {
+        Notificare.device().fetchUserData(object : NotificareCallback<NotificareUserData> {
             override fun onSuccess(result: NotificareUserData) {
-                val json = JSONObject()
-                result.forEach { json.put(it.key, it.value) }
+                try {
+                    val json = JSONObject()
+                    result.forEach { json.put(it.key, it.value) }
 
-                callback.success(json)
+                    callback.success(json)
+                } catch (e: Exception) {
+                    callback.error(e.message)
+                }
             }
 
             override fun onFailure(e: Exception) {
@@ -334,18 +351,24 @@ class NotificarePlugin : CordovaPlugin() {
     }
 
     private fun updateUserData(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val json = args.getJSONObject(0)
-        val iterator = json.keys()
-
         val userData = mutableMapOf<String, String>()
-        while (iterator.hasNext()) {
-            val key = iterator.next()
-            if (!json.isNull(key)) {
-                userData[key] = json.getString(key)
+
+        try {
+            val json = args.getJSONObject(0)
+            val iterator = json.keys()
+
+            while (iterator.hasNext()) {
+                val key = iterator.next()
+                if (!json.isNull(key)) {
+                    userData[key] = json.getString(key)
+                }
             }
+        } catch (e: Exception) {
+            callback.error(e.message)
+            return
         }
 
-        Notificare.deviceManager.updateUserData(userData, object : NotificareCallback<Unit> {
+        Notificare.device().updateUserData(userData, object : NotificareCallback<Unit> {
             override fun onSuccess(result: Unit) {
                 callback.void()
             }
@@ -364,27 +387,33 @@ class NotificarePlugin : CordovaPlugin() {
         val event = args.getString(0)
         val json: JSONObject? = if (!args.isNull(1)) args.getJSONObject(1) else null
 
-        val data: NotificareEventData?
-
-        try {
-            data = json?.toString()?.let { NotificareEvent.dataAdapter.fromJson(it) }
+        val data: NotificareEventData? = try {
+            json?.let { NotificareEvent.createData(it) }
         } catch (e: Exception) {
             callback.error(e.message)
             return
         }
 
-        Notificare.eventsManager.logCustom(event, data)
-        callback.void()
+        Notificare.events().logCustom(event, data, object : NotificareCallback<Unit> {
+            override fun onSuccess(result: Unit) {
+                callback.void()
+            }
+
+            override fun onFailure(e: Exception) {
+                callback.error(e.message)
+            }
+        })
     }
 
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificarePluginEventManager.setup(object : NotificarePluginEventManager.Consumer {
-            override fun onEvent(event: NotificarePluginEventManager.Event) {
+        NotificarePluginEventBroker.setup(object : NotificarePluginEventBroker.Consumer {
+            override fun onEvent(event: NotificarePluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)
                 when (event.payload) {
+                    null -> {} // Skip encoding null payloads.
                     is Boolean -> payload.put("data", event.payload)
                     is Int -> payload.put("data", event.payload)
                     is Float -> payload.put("data", event.payload)
@@ -408,12 +437,20 @@ private fun CordovaArgs.optionalString(index: Int, defaultValue: String? = null)
     return if (isNull(index)) defaultValue else getString(index)
 }
 
+private fun CallbackContext.void() {
+    sendPluginResult(PluginResult(PluginResult.Status.OK, null as String?))
+}
+
 private fun CallbackContext.success(b: Boolean) {
     sendPluginResult(PluginResult(PluginResult.Status.OK, b))
 }
 
-private fun CallbackContext.void() {
-    sendPluginResult(PluginResult(PluginResult.Status.OK, null as String?))
+private fun CallbackContext.nullableSuccess(str: String?) {
+    if (str == null) {
+        void()
+    } else {
+        success(str)
+    }
 }
 
 private fun CallbackContext.nullableSuccess(json: JSONObject?) {

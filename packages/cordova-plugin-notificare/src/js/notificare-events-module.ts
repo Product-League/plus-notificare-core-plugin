@@ -1,9 +1,6 @@
-import * as cordova from 'cordova';
-import { Nullable } from './utils';
-
-export class NotificareEventsManager {
+export class NotificareEventsModule {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static logCustom(event: string, data?: Nullable<Record<string, any>>): Promise<void> {
+  public async logCustom(event: string, data?: Record<string, any>) {
     return new Promise((resolve, reject) => {
       cordova.exec(resolve, reject, 'Notificare', 'logCustom', [event, data]);
     });

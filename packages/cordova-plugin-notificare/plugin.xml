@@ -17,7 +17,7 @@
         <config-file target="config.xml" parent="/*">
             <preference name="AndroidXEnabled" value="true" />
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <preference name="GradlePluginKotlinVersion" value="1.5.10" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
         </config-file>
 
         <config-file parent="/widget" target="res/xml/config.xml">
@@ -39,7 +39,7 @@
         </config-file>
 
         <source-file src="src/android/NotificarePlugin.kt" target-dir="app/src/main/kotlin/re/notifica/cordova" />
-        <source-file src="src/android/NotificarePluginEventManager.kt" target-dir="app/src/main/kotlin/re/notifica/cordova" />
+        <source-file src="src/android/NotificarePluginEventBroker.kt" target-dir="app/src/main/kotlin/re/notifica/cordova" />
         <source-file src="src/android/NotificarePluginReceiver.kt" target-dir="app/src/main/kotlin/re/notifica/cordova" />
 
         <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />
@@ -54,14 +54,16 @@
         </config-file>
 
         <source-file src="src/ios/NotificarePlugin.swift" />
-        <source-file src="src/ios/NotificarePluginEventManager.swift" />
+        <source-file src="src/ios/NotificarePluginEventBroker.swift" />
+        <source-file src="src/ios/AppDelegate+NotificarePlugin.h" />
+        <source-file src="src/ios/AppDelegate+NotificarePlugin.m" />
 
         <podspec>
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareKit" spec="3.0.0-alpha.1" />
+                <pod name="Notificare/NotificareKit" spec="3.0.0-beta.2" />
             </pods>
         </podspec>
     </platform>

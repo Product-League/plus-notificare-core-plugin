@@ -5,7 +5,16 @@ buildscript {
         maven { url "https://maven.notifica.re/releases" }
     }
     dependencies {
-        classpath 're.notifica.gradle:notificare-services:1.0.0'
+        classpath 're.notifica.gradle:notificare-services:1.0.1'
+    }
+}
+
+android {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += [
+                '-Xopt-in=re.notifica.InternalNotificareApi',
+        ]
     }
 }
 
@@ -18,10 +27,7 @@ repositories {
 }
 
 dependencies {
-    def moshi_version = '1.12.0'
-    implementation "com.squareup.moshi:moshi:$moshi_version"
-
-    def notificare_version = '3.0.0-alpha.1'
+    def notificare_version = '3.0.0-beta.2'
     implementation "re.notifica:notificare:$notificare_version"
 }
 

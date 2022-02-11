@@ -7,12 +7,11 @@ class NotificarePushPlugin : CDVPlugin {
     override func pluginInitialize() {
         super.pluginInitialize()
 
-        NotificarePush.shared.delegate = self
+        Notificare.shared.push().delegate = self
     }
 
-    @objc
-    func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificarePushPluginEventManager.startListening { event in
+    @objc func registerListener(_ command: CDVInvokedUrlCommand) {
+        NotificarePushPluginEventBroker.startListening { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]
@@ -73,7 +72,7 @@ class NotificarePushPlugin : CDVPlugin {
             }
         }
 
-        NotificarePush.shared.authorizationOptions = authorizationOptions
+        Notificare.shared.push().authorizationOptions = authorizationOptions
 
         let result = CDVPluginResult(status: .ok)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
@@ -110,7 +109,7 @@ class NotificarePushPlugin : CDVPlugin {
             }
         }
 
-        NotificarePush.shared.categoryOptions = categoryOptions
+        Notificare.shared.push().categoryOptions = categoryOptions
 
         let result = CDVPluginResult(status: .ok)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
@@ -145,27 +144,24 @@ class NotificarePushPlugin : CDVPlugin {
             }
         }
 
-        NotificarePush.shared.presentationOptions = presentationOptions
+        Notificare.shared.push().presentationOptions = presentationOptions
 
         let result = CDVPluginResult(status: .ok)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
     }
 
-    @objc
-    func isRemoteNotificationsEnabled(_ command: CDVInvokedUrlCommand) {
-        let result = CDVPluginResult(status: .ok, messageAs: NotificarePush.shared.isRemoteNotificationsEnabled)
+    @objc func hasRemoteNotificationsEnabled(_ command: CDVInvokedUrlCommand) {
+        let result = CDVPluginResult(status: .ok, messageAs: Notificare.shared.push().hasRemoteNotificationsEnabled)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
     }
 
-    @objc
-    func isAllowedUI(_ command: CDVInvokedUrlCommand) {
-        let result = CDVPluginResult(status: .ok, messageAs: NotificarePush.shared.allowedUI)
+    @objc func allowedUI(_ command: CDVInvokedUrlCommand) {
+        let result = CDVPluginResult(status: .ok, messageAs: Notificare.shared.push().allowedUI)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
     }
 
-    @objc
-    func enableRemoteNotifications(_ command: CDVInvokedUrlCommand) {
-        NotificarePush.shared.enableRemoteNotifications { result in
+    @objc func enableRemoteNotifications(_ command: CDVInvokedUrlCommand) {
+        Notificare.shared.push().enableRemoteNotifications { result in
             switch result {
             case .success:
                 let result = CDVPluginResult(status: .ok)
@@ -177,9 +173,8 @@ class NotificarePushPlugin : CDVPlugin {
         }
     }
 
-    @objc
-    func disableRemoteNotifications(_ command: CDVInvokedUrlCommand) {
-        NotificarePush.shared.disableRemoteNotifications()
+    @objc func disableRemoteNotifications(_ command: CDVInvokedUrlCommand) {
+        Notificare.shared.push().disableRemoteNotifications()
 
         let result = CDVPluginResult(status: .ok)
         self.commandDelegate!.send(result, callbackId: command.callbackId)
@@ -189,28 +184,28 @@ class NotificarePushPlugin : CDVPlugin {
 extension NotificarePushPlugin: NotificarePushDelegate {
     func notificare(_ notificarePush: NotificarePush, didReceiveNotification notification: NotificareNotification) {
         do {
-            NotificarePushPluginEventManager.dispatchEvent(
+            NotificarePushPluginEventBroker.dispatchEvent(
                 name: "notification_received",
                 payload: try notification.toJson()
             )
         } catch {
-            NotificareLogger.error("Failed to emit the notification_received event.\n\(error)")
+            NotificareLogger.error("Failed to emit the notification_received event.", error: error)
         }
     }
 
     func notificare(_ notificarePush: NotificarePush, didReceiveSystemNotification notification: NotificareSystemNotification) {
         do {
-            NotificarePushPluginEventManager.dispatchEvent(
+            NotificarePushPluginEventBroker.dispatchEvent(
                 name: "system_notification_received",
                 payload: try notification.toJson()
             )
         } catch {
-            NotificareLogger.error("Failed to emit the system_notification_received event.\n\(error)")
+            NotificareLogger.error("Failed to emit the system_notification_received event.", error: error)
         }
     }
 
     func notificare(_ notificarePush: NotificarePush, didReceiveUnknownNotification userInfo: [AnyHashable : Any]) {
-        NotificarePushPluginEventManager.dispatchEvent(
+        NotificarePushPluginEventBroker.dispatchEvent(
             name: "unknown_notification_received",
             payload: userInfo
         )
@@ -218,12 +213,12 @@ extension NotificarePushPlugin: NotificarePushDelegate {
 
     func notificare(_ notificarePush: NotificarePush, didOpenNotification notification: NotificareNotification) {
         do {
-            NotificarePushPluginEventManager.dispatchEvent(
+            NotificarePushPluginEventBroker.dispatchEvent(
                 name: "notification_opened",
                 payload: try notification.toJson()
             )
         } catch {
-            NotificareLogger.error("Failed to emit the notification_opened event.\n\(error)")
+            NotificareLogger.error("Failed to emit the notification_opened event.", error: error)
         }
     }
 
@@ -234,21 +229,21 @@ extension NotificarePushPlugin: NotificarePushDelegate {
                 "action": try action.toJson(),
             ]
 
-            NotificarePushPluginEventManager.dispatchEvent(
+            NotificarePushPluginEventBroker.dispatchEvent(
                 name: "notification_action_opened",
                 payload: payload
             )
         } catch {
-            NotificareLogger.error("Failed to emit the notification_action_opened event.\n\(error)")
+            NotificareLogger.error("Failed to emit the notification_action_opened event.", error: error)
         }
     }
 
-//    func notificare(_ notificarePush: NotificarePush, didReceiveUnknownAction action: String, for notification: [AnyHashable : Any], responseText: String?) {
-//
-//    }
+    //    func notificare(_ notificarePush: NotificarePush, didReceiveUnknownAction action: String, for notification: [AnyHashable : Any], responseText: String?) {
+    //
+    //    }
 
     func notificare(_ notificarePush: NotificarePush, didChangeNotificationSettings granted: Bool) {
-        NotificarePushPluginEventManager.dispatchEvent(
+        NotificarePushPluginEventBroker.dispatchEvent(
             name: "notification_settings_changed",
             payload: granted
         )
@@ -256,17 +251,17 @@ extension NotificarePushPlugin: NotificarePushDelegate {
 
     func notificare(_ notificarePush: NotificarePush, shouldOpenSettings notification: NotificareNotification?) {
         do {
-            NotificarePushPluginEventManager.dispatchEvent(
+            NotificarePushPluginEventBroker.dispatchEvent(
                 name: "should_open_notification_settings",
                 payload: try notification?.toJson()
             )
         } catch {
-            NotificareLogger.error("Failed to emit the should_open_notification_settings event.\n\(error)")
+            NotificareLogger.error("Failed to emit the should_open_notification_settings event.", error: error)
         }
     }
 
     func notificare(_ notificarePush: NotificarePush, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        NotificarePushPluginEventManager.dispatchEvent(
+        NotificarePushPluginEventBroker.dispatchEvent(
             name: "failed_to_register_for_remote_notifications",
             payload: error.localizedDescription
         )

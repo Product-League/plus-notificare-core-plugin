@@ -7,19 +7,20 @@ import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
 import org.json.JSONArray
 import org.json.JSONObject
-import re.notifica.push.NotificarePush
+import re.notifica.Notificare
+import re.notifica.push.ktx.push
 
 class NotificarePushPlugin : CordovaPlugin() {
 
     override fun pluginInitialize() {
-        NotificarePush.intentReceiver = NotificarePushPluginReceiver::class.java
+        Notificare.push().intentReceiver = NotificarePushPluginReceiver::class.java
 
         val intent = cordova.activity.intent
         if (intent != null) onNewIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
-        NotificarePush.handleTrampolineIntent(intent)
+        Notificare.push().handleTrampolineIntent(intent)
     }
 
     override fun execute(action: String, args: CordovaArgs, callback: CallbackContext): Boolean {
@@ -27,12 +28,12 @@ class NotificarePushPlugin : CordovaPlugin() {
             "setAuthorizationOptions" -> setAuthorizationOptions(args, callback)
             "setCategoryOptions" -> setCategoryOptions(args, callback)
             "setPresentationOptions" -> setPresentationOptions(args, callback)
-            "isRemoteNotificationsEnabled" -> isRemoteNotificationsEnabled(args, callback)
-            "isAllowedUI" -> isAllowedUI(args, callback)
+            "hasRemoteNotificationsEnabled" -> hasRemoteNotificationsEnabled(args, callback)
+            "allowedUI" -> allowedUI(args, callback)
             "enableRemoteNotifications" -> enableRemoteNotifications(args, callback)
             "disableRemoteNotifications" -> disableRemoteNotifications(args, callback)
 
-            // Events
+            // Event broker
             "registerListener" -> registerListener(args, callback)
 
             else -> {
@@ -61,32 +62,36 @@ class NotificarePushPlugin : CordovaPlugin() {
         callback.void()
     }
 
-    private fun isRemoteNotificationsEnabled(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        callback.success(NotificarePush.isRemoteNotificationsEnabled)
+    private fun hasRemoteNotificationsEnabled(
+        @Suppress("UNUSED_PARAMETER") args: CordovaArgs,
+        callback: CallbackContext
+    ) {
+        callback.success(Notificare.push().hasRemoteNotificationsEnabled)
     }
 
-    private fun isAllowedUI(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        callback.success(NotificarePush.allowedUI)
+    private fun allowedUI(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
+        callback.success(Notificare.push().allowedUI)
     }
 
     private fun enableRemoteNotifications(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificarePush.enableRemoteNotifications()
+        Notificare.push().enableRemoteNotifications()
         callback.void()
     }
 
     private fun disableRemoteNotifications(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificarePush.disableRemoteNotifications()
+        Notificare.push().disableRemoteNotifications()
         callback.void()
     }
 
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificarePushPluginEventManager.setup(object : NotificarePushPluginEventManager.Consumer {
-            override fun onEvent(event: NotificarePushPluginEventManager.Event) {
+        NotificarePushPluginEventBroker.setup(object : NotificarePushPluginEventBroker.Consumer {
+            override fun onEvent(event: NotificarePushPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)
                 when (event.payload) {
+                    null -> {} // Skip encoding null payloads.
                     is Boolean -> payload.put("data", event.payload)
                     is Int -> payload.put("data", event.payload)
                     is Float -> payload.put("data", event.payload)
@@ -106,22 +111,10 @@ class NotificarePushPlugin : CordovaPlugin() {
     }
 }
 
-private fun CordovaArgs.optionalString(index: Int, defaultValue: String? = null): String? {
-    return if (isNull(index)) defaultValue else getString(index)
-}
-
-private fun CallbackContext.success(b: Boolean) {
-    sendPluginResult(PluginResult(PluginResult.Status.OK, b))
-}
-
 private fun CallbackContext.void() {
     sendPluginResult(PluginResult(PluginResult.Status.OK, null as String?))
 }
 
-private fun CallbackContext.nullableSuccess(json: JSONObject?) {
-    if (json == null) {
-        void()
-    } else {
-        success(json)
-    }
+private fun CallbackContext.success(b: Boolean) {
+    sendPluginResult(PluginResult(PluginResult.Status.OK, b))
 }

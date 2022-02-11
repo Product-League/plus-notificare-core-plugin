@@ -1,13 +1,13 @@
 package re.notifica.push.cordova
 
-import re.notifica.NotificareLogger
+import re.notifica.internal.NotificareLogger
 
-internal object NotificarePushPluginEventManager {
+internal object NotificarePushPluginEventBroker {
 
     private val eventQueue = mutableListOf<Event>()
     private var consumer: Consumer? = null
 
-    fun dispatchEvent(name: String, payload: Any) {
+    fun dispatchEvent(name: String, payload: Any?) {
         val event = Event(name, payload)
 
         val consumer = consumer ?: run {
@@ -31,7 +31,7 @@ internal object NotificarePushPluginEventManager {
 
     data class Event(
         val name: String,
-        val payload: Any
+        val payload: Any?,
     )
 
     interface Consumer {

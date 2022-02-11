@@ -1,21 +1,14 @@
 import { NotificareNotification, NotificareNotificationAction } from 'cordova-plugin-notificare';
 import { EventSubscription } from './events';
-import {
-  ActionExecutedEvent,
-  ActionFailedToExecuteEvent,
-  ActionNotExecutedEvent,
-  ActionWillExecuteEvent,
-  NotificationUrlClickedEvent,
-} from './models';
 
 export class NotificarePushUI {
-  static async presentNotification(notification: NotificareNotification): Promise<void> {
+  public static async presentNotification(notification: NotificareNotification): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       cordova.exec(resolve, reject, 'NotificarePushUI', 'presentNotification', [notification]);
     });
   }
 
-  static async presentAction(
+  public static async presentAction(
     notification: NotificareNotification,
     action: NotificareNotificationAction
   ): Promise<void> {
@@ -26,43 +19,67 @@ export class NotificarePushUI {
 
   // region Events
 
-  static onNotificationWillPresent(callback: (notification: NotificareNotification) => void): EventSubscription {
+  public static onNotificationWillPresent(callback: (notification: NotificareNotification) => void): EventSubscription {
     return new EventSubscription('notification_will_present', callback);
   }
 
-  static onNotificationPresented(callback: (notification: NotificareNotification) => void): EventSubscription {
+  public static onNotificationPresented(callback: (notification: NotificareNotification) => void): EventSubscription {
     return new EventSubscription('notification_presented', callback);
   }
 
-  static onNotificationFinishedPresenting(callback: (notification: NotificareNotification) => void): EventSubscription {
+  public static onNotificationFinishedPresenting(
+    callback: (notification: NotificareNotification) => void
+  ): EventSubscription {
     return new EventSubscription('notification_finished_presenting', callback);
   }
 
-  static onNotificationFailedToPresent(callback: (notification: NotificareNotification) => void): EventSubscription {
+  public static onNotificationFailedToPresent(
+    callback: (notification: NotificareNotification) => void
+  ): EventSubscription {
     return new EventSubscription('notification_failed_to_present', callback);
   }
 
-  static onNotificationUrlClicked(callback: (data: NotificationUrlClickedEvent) => void): EventSubscription {
+  public static onNotificationUrlClicked(
+    callback: (data: { notification: NotificareNotification; url: string }) => void
+  ): EventSubscription {
     return new EventSubscription('notification_url_clicked', callback);
   }
 
-  static onActionWillExecute(callback: (data: ActionWillExecuteEvent) => void): EventSubscription {
+  public static onActionWillExecute(
+    callback: (data: { notification: NotificareNotification; action: NotificareNotificationAction }) => void
+  ): EventSubscription {
     return new EventSubscription('action_will_execute', callback);
   }
 
-  static onActionExecuted(callback: (data: ActionExecutedEvent) => void): EventSubscription {
+  public static onActionExecuted(
+    callback: (data: { notification: NotificareNotification; action: NotificareNotificationAction }) => void
+  ): EventSubscription {
     return new EventSubscription('action_executed', callback);
   }
 
-  static onActionNotExecuted(callback: (data: ActionNotExecutedEvent) => void): EventSubscription {
+  public static onActionNotExecuted(
+    callback: (data: { notification: NotificareNotification; action: NotificareNotificationAction }) => void
+  ): EventSubscription {
     return new EventSubscription('action_not_executed', callback);
   }
 
-  static onActionFailedToExecute(callback: (data: ActionFailedToExecuteEvent) => void): EventSubscription {
+  public static onActionFailedToExecute(
+    callback: (data: {
+      notification: NotificareNotification;
+      action: NotificareNotificationAction;
+      error?: string;
+    }) => void
+  ): EventSubscription {
     return new EventSubscription('action_failed_to_execute', callback);
   }
 
-  static onCustomActionReceived(callback: (url: string) => void): EventSubscription {
+  public static onCustomActionReceived(
+    callback: (data: {
+      notification: NotificareNotification;
+      action: NotificareNotificationAction;
+      url: string;
+    }) => void
+  ): EventSubscription {
     return new EventSubscription('custom_action_received', callback);
   }
 

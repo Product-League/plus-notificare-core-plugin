@@ -18,7 +18,7 @@
             <preference name="AndroidXEnabled" value="true" />
 
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <preference name="GradlePluginKotlinVersion" value="1.5.10" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/widget">
@@ -44,7 +44,7 @@
         </config-file>
 
         <source-file src="src/android/NotificarePushUIPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />
-        <source-file src="src/android/NotificarePushUIPluginEventManager.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />
+        <source-file src="src/android/NotificarePushUIPluginEventBroker.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />
         <source-file src="src/android/notificare_styles.xml" target-dir="/res/values" />
 
         <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />
@@ -59,14 +59,14 @@
         </config-file>
 
         <source-file src="src/ios/NotificarePushUIPlugin.swift" />
-        <source-file src="src/ios/NotificarePushUIPluginEventManager.swift" />
+        <source-file src="src/ios/NotificarePushUIPluginEventBroker.swift" />
 
         <podspec>
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificarePushUIKit" spec="3.0.0-alpha.1" />
+                <pod name="Notificare/NotificarePushUIKit" spec="3.0.0-beta.2" />
             </pods>
         </podspec>
     </platform>

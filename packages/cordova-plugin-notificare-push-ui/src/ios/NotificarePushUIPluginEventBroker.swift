@@ -1,6 +1,6 @@
 import NotificareKit
 
-class NotificarePushPluginEventManager {
+class NotificarePushUIPluginEventBroker {
 
     typealias Consumer = (_ event: Event) -> Void
 

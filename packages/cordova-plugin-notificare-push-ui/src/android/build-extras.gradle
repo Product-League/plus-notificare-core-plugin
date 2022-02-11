@@ -1,3 +1,12 @@
+android {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += [
+                '-Xopt-in=re.notifica.InternalNotificareApi',
+        ]
+    }
+}
+
 repositories {
     google()
     mavenCentral()
@@ -10,9 +19,9 @@ repositories {
 }
 
 dependencies {
-    def notificare_version = '3.0.0-alpha.1'
+    def notificare_version = '3.0.0-beta.2'
     api "re.notifica:notificare:$notificare_version"
     api "re.notifica:notificare-push-ui:$notificare_version"
-    implementation "re.notifica:notificare-push-ui-fcm:$notificare_version"
+    implementation "re.notifica:notificare-push-ui-gms:$notificare_version"
     implementation "re.notifica:notificare-push-ui-hms:$notificare_version"
 }

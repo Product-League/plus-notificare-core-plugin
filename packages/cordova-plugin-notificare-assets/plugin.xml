@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="cordova-plugin-notificare-assets"
+        version="3.0.0-alpha.1"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>Notificare Assets</name>
+
+    <js-module name="NotificareAssets" src="build/notificare-assets.bundle.js">
+        <clobbers target="NotificareAssets" />
+        <merges target="cordova.plugins.NotificareAssets" />
+    </js-module>
+
+    <asset src="build/notificare-assets.bundle.js.map" target="plugins/notificare-assets/build/notificare-assets.bundle.js.map" />
+
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <preference name="AndroidXEnabled" value="true" />
+
+            <preference name="GradlePluginKotlinEnabled" value="true" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/widget">
+            <feature name="NotificareAssets">
+                <param name="android-package" value="re.notifica.assets.cordova.NotificareAssetsPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NotificareAssets">
+                <param name="android-package" value="re.notifica.assets.cordova.NotificareAssetsPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/NotificareAssetsPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/assets/cordova" />
+
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="NotificareAssets">
+                <param name="ios-package" value="NotificareAssetsPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/ios/NotificareAssetsPlugin.swift" />
+
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git" />
+            </config>
+            <pods use-frameworks="true">
+                <pod name="Notificare/NotificareAssetsKit" spec="3.0.0-beta.2" />
+            </pods>
+        </podspec>
+    </platform>
+</plugin>

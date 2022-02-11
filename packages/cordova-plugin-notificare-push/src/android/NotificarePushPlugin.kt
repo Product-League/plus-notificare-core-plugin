@@ -1,6 +1,9 @@
 package re.notifica.push.cordova
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import androidx.lifecycle.Observer
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaArgs
 import org.apache.cordova.CordovaPlugin
@@ -12,11 +15,27 @@ import re.notifica.push.ktx.push
 
 class NotificarePushPlugin : CordovaPlugin() {
 
+    private val allowedUIObserver = Observer<Boolean> { allowedUI ->
+        if (allowedUI == null) return@Observer
+
+        NotificarePushPluginEventBroker.dispatchEvent("notification_settings_changed", allowedUI)
+    }
+
     override fun pluginInitialize() {
         Notificare.push().intentReceiver = NotificarePushPluginReceiver::class.java
 
+        onMainThread {
+            Notificare.push().observableAllowedUI.observeForever(allowedUIObserver)
+        }
+
         val intent = cordova.activity.intent
         if (intent != null) onNewIntent(intent)
+    }
+
+    override fun onDestroy() {
+        onMainThread {
+            Notificare.push().observableAllowedUI.removeObserver(allowedUIObserver)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -110,6 +129,8 @@ class NotificarePushPlugin : CordovaPlugin() {
         })
     }
 }
+
+private fun onMainThread(action: () -> Unit) = Handler(Looper.getMainLooper()).post(action)
 
 private fun CallbackContext.void() {
     sendPluginResult(PluginResult(PluginResult.Status.OK, null as String?))

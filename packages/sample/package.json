@@ -6,6 +6,8 @@
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
+    "android": "cordova run android",
+    "ios": "cordova run ios",
     "cordova:remove-platforms": "rm -rf platforms plugins",
     "cordova:add-android": "cordova platform add android; cd platforms/android; gradle wrapper",
     "cordova:add-ios": "cordova platform add ios; cd platforms/ios; pod install"

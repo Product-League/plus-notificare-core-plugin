@@ -144,6 +144,38 @@ function onDeviceReady() {
       // } else {
       //   await NotificareScannables.startQrCodeScannableSession();
       // }
+
+      //
+      // Authentication
+      //
+
+      console.log(`---> is logged in = ${await NotificareAuthentication.isLoggedIn()}`);
+      // await NotificareAuthentication.createAccount('helder@notifica.re', '123456', 'Helder Pinhal');
+      await NotificareAuthentication.login('helder@notifica.re', '123456');
+      console.log(`---> is logged in = ${await NotificareAuthentication.isLoggedIn()}`);
+      console.log(`---> user details = ${JSON.stringify(await NotificareAuthentication.fetchUserDetails())}`);
+      console.log(`---> user preferences = ${JSON.stringify(await NotificareAuthentication.fetchUserPreferences())}`);
+      console.log(`---> user segments = ${JSON.stringify(await NotificareAuthentication.fetchUserSegments())}`);
+      await NotificareAuthentication.sendPasswordReset('helder@notifica.re');
+      // await NotificareAuthentication.resetPassword('helder@notifica.re', '---');
+      await NotificareAuthentication.changePassword('123456');
+      // await NotificareAuthentication.validateUser('---');
+      console.log(
+        `---> generate push email = ${JSON.stringify(await NotificareAuthentication.generatePushEmailAddress())}`
+      );
+
+      const segments = await NotificareAuthentication.fetchUserSegments();
+      await NotificareAuthentication.addUserSegment(segments[0]);
+      await NotificareAuthentication.removeUserSegment(segments[0]);
+
+      const preferences = await NotificareAuthentication.fetchUserPreferences();
+      const preference = preferences[0];
+      const option = preference.options[0];
+      await NotificareAuthentication.addUserSegmentToPreference(preference, option);
+      await NotificareAuthentication.removeUserSegmentFromPreference(preference, option);
+
+      await NotificareAuthentication.logout();
+      console.log(`---> is logged in = ${await NotificareAuthentication.isLoggedIn()}`);
     });
 
     NotificarePush.onNotificationReceived((notification) => {
@@ -271,6 +303,20 @@ function onDeviceReady() {
     NotificareScannables.onScannableSessionFailed((error) => {
       console.log('=== SCANNABLE SESSION FAILED ===');
       console.log(JSON.stringify(error, null, 2));
+    });
+
+    NotificareAuthentication.onPasswordResetTokenReceived(async (token) => {
+      console.log('=== PASSWORD RESET TOKEN RECEIVED ===');
+      console.log(JSON.stringify(token, null, 2));
+
+      await NotificareAuthentication.resetPassword('123456', token);
+    });
+
+    NotificareAuthentication.onValidateUserTokenReceived(async (token) => {
+      console.log('=== VALIDATE USER TOKEN RECEIVED ===');
+      console.log(JSON.stringify(token, null, 2));
+
+      await NotificareAuthentication.validateUser(token);
     });
   })();
 }

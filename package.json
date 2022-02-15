@@ -1,6 +1,16 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "app:android": "lerna run android --scope sample --stream",
+    "app:android:studio": "studio packages/sample/platforms/android",
+    "app:ios": "lerna run ios --scope sample --stream",
+    "app:ios:xcode": "open packages/sample/platforms/ios/HelloCordova.xcworkspace",
+    "lint": "lerna run lint",
+    "pack": "lerna run pack",
+    "prepare": "husky install",
+    "typescript": "lerna run build:typescript -- --noEmit"
+  },
   "devDependencies": {
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^16.0.0",

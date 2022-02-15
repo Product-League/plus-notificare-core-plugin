@@ -55,8 +55,6 @@
 
         <source-file src="src/ios/NotificarePlugin.swift" />
         <source-file src="src/ios/NotificarePluginEventBroker.swift" />
-        <source-file src="src/ios/AppDelegate+NotificarePlugin.h" />
-        <source-file src="src/ios/AppDelegate+NotificarePlugin.m" />
 
         <podspec>
             <config>

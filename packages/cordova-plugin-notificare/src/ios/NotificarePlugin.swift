@@ -7,6 +7,8 @@ class NotificarePlugin : CDVPlugin {
         super.pluginInitialize()
 
         Notificare.shared.delegate = self
+
+        _ = NotificareSwizzler.addInterceptor(self)
     }
 
     override func handleOpenURL(_ notification: Notification!) {
@@ -26,18 +28,6 @@ class NotificarePlugin : CDVPlugin {
             name: "url_opened",
             payload: url.absoluteString
         )
-    }
-
-    @objc func handleUserActivity(_ userActivity: NSUserActivity) -> Bool {
-        guard let url = userActivity.webpageURL else {
-            return false
-        }
-
-        if Notificare.shared.handleTestDeviceUrl(url) {
-            return true
-        }
-
-        return Notificare.shared.handleDynamicLinkUrl(url)
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
@@ -404,5 +394,19 @@ extension NotificarePlugin: NotificareDelegate {
 
     func notificareDidUnlaunch(_ notificare: Notificare) {
         NotificarePluginEventBroker.dispatchEvent(name: "unlaunched", payload: nil)
+    }
+}
+
+extension NotificarePlugin: NotificareAppDelegateInterceptor {
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        guard let url = userActivity.webpageURL else {
+            return false
+        }
+
+        if Notificare.shared.handleTestDeviceUrl(url) {
+            return true
+        }
+
+        return Notificare.shared.handleDynamicLinkUrl(url)
     }
 }

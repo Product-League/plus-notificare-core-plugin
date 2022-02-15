@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="cordova-plugin-notificare-authentication"
+        version="3.0.0-alpha.1"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>Notificare Authentication</name>
+
+    <js-module name="NotificareAuthentication" src="build/notificare-authentication.bundle.js">
+        <clobbers target="NotificareAuthentication" />
+        <merges target="cordova.plugins.NotificareAuthentication" />
+    </js-module>
+
+    <asset src="build/notificare-authentication.bundle.js.map" target="plugins/notificare-authentication/build/notificare-authentication.bundle.js.map" />
+
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <preference name="AndroidXEnabled" value="true" />
+
+            <preference name="GradlePluginKotlinEnabled" value="true" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/widget">
+            <feature name="NotificareAuthentication">
+                <param name="android-package" value="re.notifica.authentication.cordova.NotificareAuthenticationPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NotificareAuthentication">
+                <param name="android-package" value="re.notifica.authentication.cordova.NotificareAuthenticationPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/NotificareAuthenticationPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/authentication/cordova" />
+        <source-file src="src/android/NotificareAuthenticationPluginEventBroker.kt" target-dir="app/src/main/kotlin/re/notifica/authentication/cordova" />
+
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="NotificareAuthentication">
+                <param name="ios-package" value="NotificareAuthenticationPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/ios/NotificareAuthenticationPlugin.swift" />
+        <source-file src="src/ios/NotificareAuthenticationPluginEventBroker.swift" />
+
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git" />
+            </config>
+            <pods use-frameworks="true">
+                <pod name="Notificare/NotificareAuthenticationKit" spec="3.0.0-beta.2" />
+            </pods>
+        </podspec>
+    </platform>
+</plugin>

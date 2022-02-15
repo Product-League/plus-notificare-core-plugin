@@ -5,6 +5,7 @@ export interface NotificareAsset {
   readonly url?: string;
   readonly button?: NotificareAssetButton;
   readonly metaData?: NotificareAssetMetaData;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly extra: Record<string, any>;
 }
 

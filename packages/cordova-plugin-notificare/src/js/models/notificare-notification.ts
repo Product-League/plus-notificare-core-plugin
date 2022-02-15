@@ -9,12 +9,14 @@ export interface NotificareNotification {
   readonly content: NotificareNotificationContent[];
   readonly actions: NotificareNotificationAction[];
   readonly attachments: NotificareNotificationAttachment[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly extra: Record<string, any>;
   readonly targetContentIdentifier?: string;
 }
 
 export interface NotificareNotificationContent {
   readonly type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly data: any;
 }
 

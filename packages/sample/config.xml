@@ -58,7 +58,7 @@
             </array>
         </config-file>
 
-        <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.associated-domains" >
+        <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.associated-domains">
             <array>
                 <string>applinks:hallo.ntc.re</string>
                 <string>applinks:585702253cad4414df0e3b20.applinks.notifica.re</string>

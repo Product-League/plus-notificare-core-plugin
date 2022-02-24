@@ -2,7 +2,7 @@
 
 # Notificare Cordova SDK
 
-[![GitHub release](https://img.shields.io/github/v/release/notificare/notificare-sdk-cordova?include_prereleases)](https://github.com/notificare/notificare-sdk-cordova/releases)
+[![GitHub release](https://img.shields.io/github/v/release/notificare/notificare-sdk-cordova)](https://github.com/notificare/notificare-sdk-cordova/releases)
 [![License](https://img.shields.io/github/license/notificare/notificare-sdk-cordova)](https://github.com/notificare/notificare-sdk-cordova/blob/main/LICENSE)
 
 The Notificare Cordova SDK makes it quick and easy to communicate efficiently with many of the Notificare API services and enables you to seamlessly integrate our various features, from Push Notifications to Contextualised Storage.
@@ -14,7 +14,6 @@ Table of contents
 =================
 
 * [Features](#features)
-* [Releases](#releases)
 * [Installation](#installation)
   * [Requirements](#requirements)
   * [Configuration](#configuration)

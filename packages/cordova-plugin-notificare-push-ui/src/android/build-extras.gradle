@@ -14,12 +14,10 @@ repositories {
     maven { url 'https://maven.notifica.re/releases' }
     maven { url 'https://maven.notifica.re/prereleases' }
     maven { url 'https://developer.huawei.com/repo' }
-
-    mavenLocal()
 }
 
 dependencies {
-    def notificare_version = '3.0.0'
+    def notificare_version = '3.0.1'
     api "re.notifica:notificare:$notificare_version"
     api "re.notifica:notificare-push-ui:$notificare_version"
     implementation "re.notifica:notificare-push-ui-gms:$notificare_version"

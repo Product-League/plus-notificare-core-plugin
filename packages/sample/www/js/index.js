@@ -182,10 +182,18 @@ function onDeviceReady() {
       console.log(`---> Received notification = ${JSON.stringify(notification)}`);
     });
 
+    NotificarePush.onUnknownNotificationReceived((notification) => {
+      console.log(`---> Unknown notification received = ${JSON.stringify(notification)}`);
+    });
+
     NotificarePush.onNotificationOpened(async (notification) => {
       console.log(`---> Opened notification = ${JSON.stringify(notification)}`);
 
       await NotificarePushUI.presentNotification(notification);
+    });
+
+    NotificarePush.onUnknownNotificationOpened((notification) => {
+      console.log(`---> Opened unknown notification = ${JSON.stringify(notification)}`);
     });
 
     NotificarePush.onNotificationSettingsChanged((granted) => {

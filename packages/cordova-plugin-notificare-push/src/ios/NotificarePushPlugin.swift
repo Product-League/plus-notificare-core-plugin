@@ -222,6 +222,21 @@ extension NotificarePushPlugin: NotificarePushDelegate {
         }
     }
 
+    func notificare(_ notificarePush: NotificarePush, didOpenUnknownNotification userInfo: [AnyHashable : Any]) {
+        let payload: [String: Any] = Dictionary(uniqueKeysWithValues: userInfo.compactMap {
+            guard let key = $0.key as? String else {
+                return nil
+            }
+
+            return (key, $0.value)
+        })
+
+        NotificarePushPluginEventBroker.dispatchEvent(
+            name: "unknown_notification_opened",
+            payload: payload
+        )
+    }
+
     func notificare(_ notificarePush: NotificarePush, didOpenAction action: NotificareNotification.Action, for notification: NotificareNotification) {
         do {
             let payload = [
@@ -238,9 +253,29 @@ extension NotificarePushPlugin: NotificarePushDelegate {
         }
     }
 
-    //    func notificare(_ notificarePush: NotificarePush, didReceiveUnknownAction action: String, for notification: [AnyHashable : Any], responseText: String?) {
-    //
-    //    }
+    func notificare(_ notificarePush: NotificarePush, didOpenUnknownAction action: String, for notification: [AnyHashable : Any], responseText: String?) {
+        let notificationMap: [String: Any] = Dictionary(uniqueKeysWithValues: notification.compactMap {
+            guard let key = $0.key as? String else {
+                return nil
+            }
+
+            return (key, $0.value)
+        })
+
+        var data: [String: Any] = [
+            "notification": notificationMap,
+            "action": action,
+        ]
+
+        if let responseText = responseText {
+            data["responseText"] = responseText
+        }
+
+        NotificarePushPluginEventBroker.dispatchEvent(
+            name: "unknown_notification_action_opened",
+            payload: data
+        )
+    }
 
     func notificare(_ notificarePush: NotificarePush, didChangeNotificationSettings granted: Bool) {
         NotificarePushPluginEventBroker.dispatchEvent(

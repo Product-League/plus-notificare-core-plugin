@@ -64,5 +64,27 @@
                 <string>applinks:585702253cad4414df0e3b20.applinks.notifica.re</string>
             </array>
         </config-file>
+
+        <config-file target="*-Info.plist" parent="NFCReaderUsageDescription">
+            <string>We will need access to the device's NFC reader to unlock new content.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>We will need access to the device's camera to reply to notifications or scan QR codes.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
+            <string>We will need to make use of your location to present relevant information about offers around you.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+            <string>We will need to make use of your location to present relevant information about offers around you.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+            <string>We will need to make use of your location to present relevant information about offers around you.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+            <string>We will need access to the device's microphone to reply to notifications.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+            <string>We may need to access your photos to reply to notifications.</string>
+        </config-file>
     </platform>
 </widget>

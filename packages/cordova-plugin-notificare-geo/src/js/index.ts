@@ -7,6 +7,8 @@ export * from './models/notificare-location';
 export * from './models/notificare-region';
 export * from './models/notificare-visit';
 
+export * from './permissions';
+
 export default NotificareGeo;
 
 bootstrap();

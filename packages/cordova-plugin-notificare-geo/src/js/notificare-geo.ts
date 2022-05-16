@@ -4,6 +4,7 @@ import { NotificareRegion } from './models/notificare-region';
 import { NotificareBeacon } from './models/notificare-beacon';
 import { NotificareVisit } from './models/notificare-visit';
 import { NotificareHeading } from './models/notificare-heading';
+import { PermissionGroup, PermissionRationale, PermissionStatus } from './permissions';
 
 export class NotificareGeo {
   public static async hasLocationServicesEnabled(): Promise<boolean> {
@@ -27,6 +28,43 @@ export class NotificareGeo {
   public static async disableLocationUpdates(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       cordova.exec(resolve, reject, 'NotificareGeo', 'disableLocationUpdates', []);
+    });
+  }
+
+  //
+  // Permission utilities
+  //
+
+  public static async checkPermissionStatus(permission: PermissionGroup): Promise<PermissionStatus> {
+    return new Promise<PermissionStatus>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificareGeo', 'checkPermissionStatus', [permission]);
+    });
+  }
+
+  public static async shouldShowPermissionRationale(permission: PermissionGroup): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificareGeo', 'shouldShowPermissionRationale', [permission]);
+    });
+  }
+
+  public static async presentPermissionRationale(
+    permission: PermissionGroup,
+    rationale: PermissionRationale
+  ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificareGeo', 'presentPermissionRationale', [permission, rationale]);
+    });
+  }
+
+  public static async requestPermission(permission: PermissionGroup): Promise<PermissionStatus> {
+    return new Promise<PermissionStatus>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificareGeo', 'requestPermission', [permission]);
+    });
+  }
+
+  public static async openAppSettings(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificareGeo', 'openAppSettings', []);
     });
   }
 

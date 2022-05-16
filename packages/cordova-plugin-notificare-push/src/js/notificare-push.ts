@@ -57,8 +57,10 @@ export class NotificarePush {
     return new EventSubscription('system_notification_received', callback);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static onUnknownNotificationReceived(callback: (notification: Record<any, any>) => void): EventSubscription {
+  public static onUnknownNotificationReceived(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    callback: (notification: Record<string, any>) => void
+  ): EventSubscription {
     return new EventSubscription('unknown_notification_received', callback);
   }
 
@@ -66,10 +68,22 @@ export class NotificarePush {
     return new EventSubscription('notification_opened', callback);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static onUnknownNotificationOpened(callback: (notification: Record<string, any>) => void): EventSubscription {
+    return new EventSubscription('unknown_notification_opened', callback);
+  }
+
   public static onNotificationActionOpened(
     callback: (data: { notification: NotificareNotification; action: NotificareNotificationAction }) => void
   ): EventSubscription {
     return new EventSubscription('notification_action_opened', callback);
+  }
+
+  public static onUnknownNotificationActionOpened(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    callback: (data: { notification: Record<string, any>; action: string; responseText?: string }) => void
+  ): EventSubscription {
+    return new EventSubscription('unknown_notification_action_opened', callback);
   }
 
   public static onNotificationSettingsChanged(callback: (granted: boolean) => void): EventSubscription {

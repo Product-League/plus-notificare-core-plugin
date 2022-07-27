@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="cordova-plugin-notificare-monetize"
+        version="3.2.0"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>Notificare Monetize</name>
+
+    <js-module name="NotificareMonetize" src="build/notificare-monetize.bundle.js">
+        <clobbers target="NotificareMonetize" />
+        <merges target="cordova.plugins.NotificareMonetize" />
+    </js-module>
+
+    <asset src="build/notificare-monetize.bundle.js.map" target="plugins/notificare-monetize/build/notificare-monetize.bundle.js.map" />
+
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <preference name="AndroidXEnabled" value="true" />
+
+            <preference name="GradlePluginKotlinEnabled" value="true" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
+
+            <preference name="GradlePluginGoogleServicesEnabled" value="true" />
+            <preference name="GradlePluginGoogleServicesVersion" value="4.3.10" />
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/widget">
+            <feature name="NotificareMonetize">
+                <param name="android-package" value="re.notifica.monetize.cordova.NotificareMonetizePlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NotificareMonetize">
+                <param name="android-package" value="re.notifica.monetize.cordova.NotificareMonetizePlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/NotificareMonetizePlugin.kt" target-dir="app/src/main/kotlin/re/notifica/monetize/cordova" />
+        <source-file src="src/android/NotificareMonetizePluginEventBroker.kt" target-dir="app/src/main/kotlin/re/notifica/monetize/cordova" />
+
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="NotificareMonetize">
+                <param name="ios-package" value="NotificareMonetizePlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/ios/NotificareMonetizePlugin.swift" />
+        <source-file src="src/ios/NotificareMonetizePluginEventBroker.swift" />
+
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git" />
+            </config>
+            <pods use-frameworks="true">
+                <pod name="Notificare/NotificareMonetizeKit" spec="3.3.0" />
+            </pods>
+        </podspec>
+    </platform>
+</plugin>

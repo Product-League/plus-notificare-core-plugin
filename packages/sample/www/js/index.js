@@ -176,6 +176,24 @@ function onDeviceReady() {
 
       await NotificareAuthentication.logout();
       console.log(`---> is logged in = ${await NotificareAuthentication.isLoggedIn()}`);
+
+      //
+      // Monetize
+      //
+
+      setTimeout(async () => {
+        const products = await NotificareMonetize.getProducts();
+        console.log(`---> products = ${JSON.stringify(products)}`);
+
+        const purchases = await NotificareMonetize.getPurchases();
+        console.log(`---> purchases = ${JSON.stringify(purchases)}`);
+
+        await NotificareMonetize.refresh();
+
+        if (products.length > 0) {
+          await NotificareMonetize.startPurchaseFlow(products[0]);
+        }
+      }, 2000);
     });
 
     NotificarePush.onNotificationReceived((notification) => {
@@ -325,6 +343,44 @@ function onDeviceReady() {
       console.log(JSON.stringify(token, null, 2));
 
       await NotificareAuthentication.validateUser(token);
+    });
+
+    NotificareMonetize.onBillingSetupFinished(() => {
+      console.log('=== BILLING SETUP FINISHED ===');
+    });
+
+    NotificareMonetize.onBillingSetupFailed((data) => {
+      console.log('=== BILLING SETUP FAILED ===');
+      console.log(JSON.stringify(data, null, 2));
+    });
+
+    NotificareMonetize.onProductsUpdated((products) => {
+      console.log('=== PRODUCTS UPDATED ===');
+      console.log(JSON.stringify(products, null, 2));
+    });
+
+    NotificareMonetize.onPurchasesUpdated((purchases) => {
+      console.log('=== PURCHASES UPDATED ===');
+      console.log(JSON.stringify(purchases, null, 2));
+    });
+
+    NotificareMonetize.onPurchaseFinished((purchase) => {
+      console.log('=== PURCHASE FINISHED ===');
+      console.log(JSON.stringify(purchase, null, 2));
+    });
+
+    NotificareMonetize.onPurchaseRestored((purchase) => {
+      console.log('=== PURCHASE RESTORED ===');
+      console.log(JSON.stringify(purchase, null, 2));
+    });
+
+    NotificareMonetize.onPurchaseCanceled(() => {
+      console.log('=== PURCHASE CANCELED ===');
+    });
+
+    NotificareMonetize.onPurchaseFailed((data) => {
+      console.log('=== PURCHASE FAILED ===');
+      console.log(JSON.stringify(data, null, 2));
     });
   })();
 }

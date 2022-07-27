@@ -1,7 +1,6 @@
 package re.notifica.push.cordova
 
 import android.content.Context
-import org.json.JSONArray
 import org.json.JSONObject
 import re.notifica.internal.NotificareLogger
 import re.notifica.models.NotificareNotification
@@ -29,54 +28,7 @@ class NotificarePushPluginReceiver : NotificarePushIntentReceiver() {
 
     override fun onUnknownNotificationReceived(context: Context, notification: NotificareUnknownNotification) {
         try {
-            val json = JSONObject()
-            json.put("messageId", notification.messageId)
-            json.put("messageType", notification.messageType)
-            json.put("senderId", notification.senderId)
-            json.put("collapseKey", notification.collapseKey)
-            json.put("from", notification.from)
-            json.put("to", notification.to)
-            json.put("sentTime", notification.sentTime)
-            json.put("ttl", notification.ttl)
-            json.put("priority", notification.priority)
-            json.put("originalPriority", notification.originalPriority)
-            json.put("notification", notification.notification?.let {
-                JSONObject().apply {
-                    put("title", it.title)
-                    put("titleLocalizationKey", it.titleLocalizationKey)
-                    put("titleLocalizationArgs", it.titleLocalizationArgs?.let { args -> JSONArray(args) })
-                    put("body", it.body)
-                    put("bodyLocalizationKey", it.bodyLocalizationKey)
-                    put("bodyLocalizationArgs", it.bodyLocalizationArgs?.let { args -> JSONArray(args) })
-                    put("icon", it.icon)
-                    put("imageUrl", it.imageUrl?.toString())
-                    put("sound", it.sound)
-                    put("tag", it.tag)
-                    put("color", it.color)
-                    put("clickAction", it.clickAction)
-                    put("channelId", it.channelId)
-                    put("link", it.link?.toString())
-                    put("ticker", it.ticker)
-                    put("sticky", it.sticky)
-                    put("localOnly", it.localOnly)
-                    put("defaultSound", it.defaultSound)
-                    put("defaultVibrateSettings", it.defaultVibrateSettings)
-                    put("defaultLightSettings", it.defaultLightSettings)
-                    it.notificationPriority?.let { priority -> put("notificationPriority", priority) }
-                    it.visibility?.let { visibility -> put("visibility", visibility) }
-                    it.notificationCount?.let { notificationCount -> put("notificationCount", notificationCount) }
-                    it.eventTime?.let { eventTime -> put("eventTime", eventTime) }
-                    put("lightSettings", it.lightSettings?.let { args -> JSONArray(args) })
-                    put("vibrateSettings", it.vibrateSettings?.let { args -> JSONArray(args) })
-                }
-            })
-            json.put("data", JSONObject().apply {
-                notification.data.forEach {
-                    put(it.key, it.value)
-                }
-            })
-
-            NotificarePushPluginEventBroker.dispatchEvent("unknown_notification_received", json)
+            NotificarePushPluginEventBroker.dispatchEvent("unknown_notification_received", notification.toJson())
         } catch (e: Exception) {
             NotificareLogger.error("Failed to emit the unknown_notification_received event.", e)
         }

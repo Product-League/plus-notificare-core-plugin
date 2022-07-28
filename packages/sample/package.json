@@ -8,6 +8,7 @@
   "scripts": {
     "android": "cordova run android",
     "ios": "cordova run ios",
+    "cordova:refresh-plugins": "yarn cordova:remove-platforms && yarn cordova:add-android && yarn cordova:add-ios",
     "cordova:remove-platforms": "rm -rf platforms plugins",
     "cordova:add-android": "cordova platform add android; cd platforms/android; gradle wrapper",
     "cordova:add-ios": "cordova platform add ios; cd platforms/ios; pod install"
@@ -26,6 +27,7 @@
     "cordova-plugin-notificare-geo": "^3.0.0",
     "cordova-plugin-notificare-inbox": "^3.0.0",
     "cordova-plugin-notificare-loyalty": "^3.0.0",
+    "cordova-plugin-notificare-monetize": "^3.0.0",
     "cordova-plugin-notificare-push": "^3.0.0",
     "cordova-plugin-notificare-push-ui": "^3.0.0",
     "cordova-plugin-notificare-scannables": "^3.0.0",
@@ -41,6 +43,7 @@
       "cordova-plugin-notificare-geo": {},
       "cordova-plugin-notificare-inbox": {},
       "cordova-plugin-notificare-loyalty": {},
+      "cordova-plugin-notificare-monetize": {},
       "cordova-plugin-notificare-push": {},
       "cordova-plugin-notificare-push-ui": {},
       "cordova-plugin-notificare-scannables": {}

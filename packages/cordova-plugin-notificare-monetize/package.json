@@ -1,7 +1,7 @@
 {
-  "name": "cordova-plugin-notificare-authentication",
+  "name": "cordova-plugin-notificare-monetize",
   "version": "3.3.0",
-  "description": "Notificare Authentication Cordova Plugin.",
+  "description": "Notificare Monetize Cordova Plugin.",
   "author": "Notificare <info@notifica.re> (https://notificare.com)",
   "license": "MIT",
   "homepage": "https://github.com/notificare/notificare-sdk-cordova#readme",
@@ -17,7 +17,7 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "main": "build/notificare-authentication.bundle.js",
+  "main": "build/notificare-monetize.bundle.js",
   "types": "build/js/index.d.ts",
   "files": [
     "src",
@@ -46,7 +46,7 @@
     "cordova-plugin-notificare": "^3.0.0"
   },
   "cordova": {
-    "id": "cordova-plugin-notificare-authentication",
+    "id": "cordova-plugin-notificare-monetize",
     "platforms": [
       "android",
       "ios"

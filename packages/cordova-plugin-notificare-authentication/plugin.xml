@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin id="cordova-plugin-notificare-authentication"
-        version="3.2.0"
+        version="3.3.0"
         xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -57,7 +57,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareAuthenticationKit" spec="3.2.0" />
+                <pod name="Notificare/NotificareAuthenticationKit" spec="3.3.0" />
             </pods>
         </podspec>
     </platform>

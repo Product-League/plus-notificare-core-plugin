@@ -6,6 +6,7 @@
     "app:android:studio": "studio packages/sample/platforms/android",
     "app:ios": "lerna run ios --scope sample --stream",
     "app:ios:xcode": "open packages/sample/platforms/ios/HelloCordova.xcworkspace",
+    "app:cordova:refresh-plugins": "lerna run cordova:refresh-plugins --scope sample --stream",
     "lint": "lerna run lint",
     "pack": "lerna run pack",
     "prepare": "husky install",

@@ -40,7 +40,7 @@
                     android:name="re.notifica.push.ui.NotificationActivity"
                     android:exported="false"
                     android:hardwareAccelerated="true"
-                    android:theme="@style/Theme.Notificare.Translucent" />
+                    android:theme="@style/Theme.Notificare.Cordova.Translucent" />
         </config-file>
 
         <source-file src="src/android/NotificarePushUIPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />

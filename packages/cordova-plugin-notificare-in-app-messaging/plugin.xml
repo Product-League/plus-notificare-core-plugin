@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="cordova-plugin-notificare-in-app-messaging"
+        version="3.3.0"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>Notificare In-App Messaging</name>
+
+    <js-module name="NotificareInAppMessaging" src="build/notificare-in-app-messaging.bundle.js">
+        <clobbers target="NotificareInAppMessaging" />
+        <merges target="cordova.plugins.NotificareInAppMessaging" />
+    </js-module>
+
+    <asset src="build/notificare-in-app-messaging.bundle.js.map" target="plugins/notificare-in-app-messaging/build/notificare-in-app-messaging.bundle.js.map" />
+
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <preference name="AndroidXEnabled" value="true" />
+
+            <preference name="GradlePluginKotlinEnabled" value="true" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
+
+            <preference name="GradlePluginGoogleServicesEnabled" value="true" />
+            <preference name="GradlePluginGoogleServicesVersion" value="4.3.10" />
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/widget">
+            <feature name="NotificareInAppMessaging">
+                <param name="android-package" value="re.notifica.iam.cordova.NotificareInAppMessagingPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NotificareInAppMessaging">
+                <param name="android-package" value="re.notifica.iam.cordova.NotificareInAppMessagingPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/NotificareInAppMessagingPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/iam/cordova" />
+        <source-file src="src/android/NotificareInAppMessagingPluginEventBroker.kt" target-dir="app/src/main/kotlin/re/notifica/iam/cordova" />
+
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="NotificareInAppMessaging">
+                <param name="ios-package" value="NotificareInAppMessagingPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/ios/NotificareInAppMessagingPlugin.swift" />
+        <source-file src="src/ios/NotificareInAppMessagingPluginEventBroker.swift" />
+
+        <podspec>
+            <config>
+                <source url="https://github.com/CocoaPods/Specs.git" />
+            </config>
+            <pods use-frameworks="true">
+                <pod name="Notificare/NotificareInAppMessagingKit" spec="3.4.0-beta.2" />
+            </pods>
+        </podspec>
+    </platform>
+</plugin>

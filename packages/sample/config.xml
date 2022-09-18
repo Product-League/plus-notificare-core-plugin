@@ -34,10 +34,25 @@
             <meta-data android:name="re.notifica.debug_logging_enabled" android:value="true" />
         </config-file>
 
+        <edit-config file="AndroidManifest.xml" target="/manifest/application/activity/[@android:name='MainActivity']" mode="merge">
+            <activity android:launchMode="singleTask" />
+        </edit-config>
+
         <!-- Temporary fix until Cordova supports Android 12 -->
         <edit-config file="AndroidManifest.xml" target="/manifest/application/activity/[@android:name='MainActivity']" mode="merge">
             <activity android:exported="true" />
         </edit-config>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application/activity/[@android:name='MainActivity']">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="${applicationId}" />
+            </intent-filter>
+        </config-file>
     </platform>
     <platform name="ios">
         <preference name="SwiftVersion" value="5" />

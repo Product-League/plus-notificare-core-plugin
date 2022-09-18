@@ -86,7 +86,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificarePushKit" spec="3.3.0" />
+                <pod name="Notificare/NotificarePushKit" spec="3.4.0-beta.2" />
             </pods>
         </podspec>
     </platform>

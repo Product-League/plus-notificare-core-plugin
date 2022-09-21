@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-notificare-push-ui",
-  "version": "3.3.0",
+  "version": "3.4.0-beta.2",
   "description": "Notificare Push UI Cordova Plugin.",
   "author": "Notificare <info@notifica.re> (https://notificare.com)",
   "license": "MIT",

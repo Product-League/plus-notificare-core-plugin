@@ -194,6 +194,14 @@ function onDeviceReady() {
           await NotificareMonetize.startPurchaseFlow(products[0]);
         }
       }, 2000);
+
+      console.log(`---> has messages suppressed = ${await NotificareInAppMessaging.hasMessagesSuppressed()}`);
+
+      await NotificareInAppMessaging.setMessagesSuppressed(true);
+      console.log(`---> has messages suppressed = ${await NotificareInAppMessaging.hasMessagesSuppressed()}`);
+
+      await NotificareInAppMessaging.setMessagesSuppressed(false);
+      console.log(`---> has messages suppressed = ${await NotificareInAppMessaging.hasMessagesSuppressed()}`);
     });
 
     NotificarePush.onNotificationReceived((notification) => {
@@ -381,6 +389,31 @@ function onDeviceReady() {
     NotificareMonetize.onPurchaseFailed((data) => {
       console.log('=== PURCHASE FAILED ===');
       console.log(JSON.stringify(data, null, 2));
+    });
+
+    NotificareInAppMessaging.onMessagePresented((message) => {
+      console.log('=== MESSAGE PRESENTED ===');
+      console.log(JSON.stringify(message, null, 2));
+    });
+
+    NotificareInAppMessaging.onMessageFinishedPresenting((message) => {
+      console.log('=== MESSAGE FINISHED PRESENTING ===');
+      console.log(JSON.stringify(message, null, 2));
+    });
+
+    NotificareInAppMessaging.onMessageFailedToPresent((message) => {
+      console.log('=== MESSAGE FAILED TO PRESENT ===');
+      console.log(JSON.stringify(message, null, 2));
+    });
+
+    NotificareInAppMessaging.onActionExecuted(({ message, action }) => {
+      console.log('=== ACTION EXECUTED ===');
+      console.log(JSON.stringify({ message, action }, null, 2));
+    });
+
+    NotificareInAppMessaging.onActionFailedToExecute(({ message, action, error }) => {
+      console.log('=== ACTION FAILED TO EXECUTE ===');
+      console.log(JSON.stringify({ message, action, error }, null, 2));
     });
   })();
 }

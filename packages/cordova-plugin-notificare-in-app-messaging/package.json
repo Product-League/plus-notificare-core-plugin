@@ -1,7 +1,7 @@
 {
-  "name": "cordova-plugin-notificare-monetize",
+  "name": "cordova-plugin-notificare-in-app-messaging",
   "version": "3.4.0-beta.2",
-  "description": "Notificare Monetize Cordova Plugin.",
+  "description": "Notificare In-App Messaging Cordova Plugin.",
   "author": "Notificare <info@notifica.re> (https://notificare.com)",
   "license": "MIT",
   "homepage": "https://github.com/notificare/notificare-sdk-cordova#readme",
@@ -17,7 +17,7 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "main": "build/notificare-monetize.bundle.js",
+  "main": "build/notificare-in-app-messaging.bundle.js",
   "types": "build/js/index.d.ts",
   "files": [
     "src",
@@ -46,7 +46,7 @@
     "cordova-plugin-notificare": "^3.0.0"
   },
   "cordova": {
-    "id": "cordova-plugin-notificare-monetize",
+    "id": "cordova-plugin-notificare-in-app-messaging",
     "platforms": [
       "android",
       "ios"

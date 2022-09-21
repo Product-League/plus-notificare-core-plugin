@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin id="cordova-plugin-notificare-push-ui"
-        version="3.3.0"
+        version="3.4.0-beta.2"
         xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -40,7 +40,7 @@
                     android:name="re.notifica.push.ui.NotificationActivity"
                     android:exported="false"
                     android:hardwareAccelerated="true"
-                    android:theme="@style/Theme.Notificare.Translucent" />
+                    android:theme="@style/Theme.Notificare.Cordova.Translucent" />
         </config-file>
 
         <source-file src="src/android/NotificarePushUIPlugin.kt" target-dir="app/src/main/kotlin/re/notifica/push/ui/cordova" />
@@ -66,7 +66,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificarePushUIKit" spec="3.3.0" />
+                <pod name="Notificare/NotificarePushUIKit" spec="3.4.0-beta.2" />
             </pods>
         </podspec>
     </platform>

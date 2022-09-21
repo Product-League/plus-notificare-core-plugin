@@ -80,6 +80,9 @@ class NotificareMonetizePlugin : CDVPlugin {
         }
         
         Notificare.shared.monetize().startPurchaseFlow(for: product)
+
+        let result = CDVPluginResult(status: .ok)
+        self.commandDelegate!.send(result, callbackId: command.callbackId)
     }
 }
 

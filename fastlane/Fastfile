@@ -66,6 +66,12 @@ lane :bump do |options|
   regex = /"cordova-plugin-notificare": ".*"/
   replacement = "\"cordova-plugin-notificare\": \"#{version}\""
   files.each { |file| update_file(file, regex, replacement) }
+
+  # Plugin
+  files = Dir['../packages/cordova-plugin-notificare*/plugin.xml']
+  regex = /(?<!xml )version=".*"/
+  replacement = "version=\"#{version}\""
+  files.each { |file| update_file(file, regex, replacement) }
 end
 
 desc <<-DESC

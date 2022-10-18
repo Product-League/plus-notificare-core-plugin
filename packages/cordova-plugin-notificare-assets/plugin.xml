@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin id="cordova-plugin-notificare-assets"
-        version="3.4.0-beta.2"
+        version="3.4.0-beta.3"
         xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -55,7 +55,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareAssetsKit" spec="3.4.0-beta.2" />
+                <pod name="Notificare/NotificareAssetsKit" spec="3.4.0-beta.3" />
             </pods>
         </podspec>
     </platform>

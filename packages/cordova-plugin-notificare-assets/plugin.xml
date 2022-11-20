@@ -55,7 +55,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareAssetsKit" spec="3.4.1" />
+                <pod name="Notificare/NotificareAssetsKit" spec="3.4.2" />
             </pods>
         </podspec>
     </platform>

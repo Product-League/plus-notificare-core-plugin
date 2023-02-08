@@ -8,9 +8,9 @@ export class NotificareInAppMessaging {
     });
   }
 
-  public static async setMessagesSuppressed(suppressed: boolean): Promise<void> {
+  public static async setMessagesSuppressed(suppressed: boolean, evaluateContext?: boolean): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      cordova.exec(resolve, reject, 'NotificareInAppMessaging', 'setMessagesSuppressed', [suppressed]);
+      cordova.exec(resolve, reject, 'NotificareInAppMessaging', 'setMessagesSuppressed', [suppressed, evaluateContext]);
     });
   }
 

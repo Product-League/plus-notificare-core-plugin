@@ -36,8 +36,9 @@ class NotificareInAppMessagingPlugin : CDVPlugin {
 
     @objc func setMessagesSuppressed(_ command: CDVInvokedUrlCommand) {
         let suppressed = command.argument(at: 0) as! Bool
+        let evaluateContext = command.argument(at: 1) as? Bool ?? false
 
-        Notificare.shared.inAppMessaging().hasMessagesSuppressed = suppressed
+        Notificare.shared.inAppMessaging().setMessagesSuppressed(suppressed, evaluateContext: evaluateContext)
 
         let result = CDVPluginResult(status: .ok)
         self.commandDelegate!.send(result, callbackId: command.callbackId)

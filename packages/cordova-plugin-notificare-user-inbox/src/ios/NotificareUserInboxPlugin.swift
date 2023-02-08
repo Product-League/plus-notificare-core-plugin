@@ -21,8 +21,8 @@ class NotificareUserInboxPlugin : CDVPlugin {
 
     @objc func parseResponseFromString(_ command: CDVInvokedUrlCommand) {
         do {
-            let json = command.argument(at: 0) as! String
-            let response = try Notificare.shared.userInbox().parseResponse(string: json)
+            let jsonStr = command.argument(at: 0) as! String
+            let response = try Notificare.shared.userInbox().parseResponse(string: jsonStr)
 
             let result = CDVPluginResult(status: .ok, messageAs: try response.toJson())
             self.commandDelegate!.send(result, callbackId: command.callbackId)

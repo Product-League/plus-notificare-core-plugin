@@ -48,7 +48,7 @@ class NotificareUserInboxPlugin : CordovaPlugin() {
     }
 
     private fun parseResponseFromString(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val json = try {
+        val jsonStr = try {
             args.getString(0)
         } catch (e: Exception) {
             callback.error(e.message)
@@ -56,7 +56,7 @@ class NotificareUserInboxPlugin : CordovaPlugin() {
         }
 
         try {
-            val response = Notificare.userInbox().parseResponse(json)
+            val response = Notificare.userInbox().parseResponse(jsonStr)
             callback.success(response.toJson())
         } catch (e: Exception) {
             callback.error(e.message)

@@ -4,7 +4,7 @@
         xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <name>Notificare UserInbox</name>
+    <name>Notificare User Inbox</name>
 
     <js-module name="NotificareUserInbox" src="build/notificare-user-inbox.bundle.js">
         <clobbers target="NotificareUserInbox" />

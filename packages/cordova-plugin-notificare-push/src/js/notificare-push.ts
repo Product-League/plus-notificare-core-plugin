@@ -1,6 +1,7 @@
 import { EventSubscription } from './events';
 import { NotificareNotification, NotificareNotificationAction } from 'cordova-plugin-notificare';
 import { NotificareSystemNotification } from './models/notificare-system-notification';
+import { NotificareNotificationDeliveryMechanism } from './models/notificare-notification-delivery-mechanism';
 
 export class NotificarePush {
   public static async setAuthorizationOptions(options: string[]): Promise<void> {
@@ -47,8 +48,20 @@ export class NotificarePush {
 
   // region Events
 
+  /**
+   * @deprecated Listen to onNotificationInfoReceived(notification, deliveryMechanism) instead.
+   */
   public static onNotificationReceived(callback: (notification: NotificareNotification) => void): EventSubscription {
     return new EventSubscription('notification_received', callback);
+  }
+
+  public static onNotificationInfoReceived(
+    callback: (data: {
+      notification: NotificareNotification;
+      deliveryMechanism: NotificareNotificationDeliveryMechanism;
+    }) => void
+  ): EventSubscription {
+    return new EventSubscription('notification_info_received', callback);
   }
 
   public static onSystemNotificationReceived(

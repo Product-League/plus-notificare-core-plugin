@@ -11,7 +11,6 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.apache.cordova.CallbackContext
@@ -39,17 +38,37 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
     private var hasOnGoingPermissionRequest = false
     private var permissionRequestCallback: CallbackContext? = null
 
-    private var permissionsLauncher: ActivityResultLauncher<Array<String>>? = null
+    private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
 
     override fun pluginInitialize() {
         Notificare.geo().addListener(this)
 
-        val activity = cordova.activity ?: run {
-            NotificareLogger.warning("Unable to acquire a reference to the current activity.")
-            return
-        }
+        permissionsLauncher = cordova.activity.registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            val status = permissions
+                .all { it.value }
+                .let { granted ->
+                    if (granted) {
+                        PermissionStatus.GRANTED
+                    } else {
+                        if (!shouldShowRationale &&
+                            !ActivityCompat.shouldShowRequestPermissionRationale(
+                                cordova.activity,
+                                permissions.keys.first()
+                            )
+                        ) {
+                            PermissionStatus.PERMANENTLY_DENIED
+                        } else {
+                            PermissionStatus.DENIED
+                        }
+                    }
+                }
 
-        setPermissionLauncher(activity)
+            permissionRequestCallback?.success(status.rawValue)
+            permissionRequestCallback = null
+            hasOnGoingPermissionRequest = false
+        }
     }
 
     override fun onDestroy() {
@@ -78,35 +97,6 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
         }
 
         return true
-    }
-
-    private fun setPermissionLauncher(activity: AppCompatActivity) {
-        permissionsLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            val status = permissions
-                .all { it.value }
-                .let { granted ->
-                    if (granted) {
-                        PermissionStatus.GRANTED
-                    } else {
-                        if (!shouldShowRationale &&
-                            !ActivityCompat.shouldShowRequestPermissionRationale(
-                                activity,
-                                permissions.keys.first()
-                            )
-                        ) {
-                            PermissionStatus.PERMANENTLY_DENIED
-                        } else {
-                            PermissionStatus.DENIED
-                        }
-                    }
-                }
-
-            permissionRequestCallback?.success(status.rawValue)
-            permissionRequestCallback = null
-            hasOnGoingPermissionRequest = false
-        }
     }
 
     // region Notificare Geo
@@ -162,11 +152,6 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
             return
         }
 
-        val context = cordova.context ?: run {
-            callback.error("Cannot continue without a context.")
-            return
-        }
-
         val permission =
             if (!args.isNull(0)) {
                 val parameter = args.getString(0)
@@ -179,7 +164,7 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
                 return
             }
 
-        val manifestPermissions = getManifestPermissions(context, permission)
+        val manifestPermissions = getManifestPermissions(activity, permission)
 
         if (manifestPermissions.isEmpty()) {
             NotificareLogger.warning("No permissions found in the manifest for $permission")
@@ -253,11 +238,6 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
             return
         }
 
-        val context = cordova.context ?: run {
-            callback.error("Cannot continue without a context.")
-            return
-        }
-
         val permission =
             if (!args.isNull(0)) {
                 val parameter = args.getString(0)
@@ -276,13 +256,13 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
             return
         }
 
-        val status = determinePermissionStatus(context, permission)
+        val status = determinePermissionStatus(activity, permission)
         if (status == PermissionStatus.GRANTED) {
             callback.success(status.rawValue)
             return
         }
 
-        val manifestPermissions = getManifestPermissions(context, permission)
+        val manifestPermissions = getManifestPermissions(activity, permission)
 
         if (manifestPermissions.isEmpty()) {
             NotificareLogger.warning("No permissions found in the manifest for $permission")
@@ -294,11 +274,7 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
         hasOnGoingPermissionRequest = true
         permissionRequestCallback = callback
 
-        if (permissionsLauncher == null) {
-            setPermissionLauncher(activity)
-        }
-
-        permissionsLauncher?.launch(manifestPermissions.toTypedArray())
+        permissionsLauncher.launch(manifestPermissions.toTypedArray())
     }
 
     private fun openAppSettings(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {

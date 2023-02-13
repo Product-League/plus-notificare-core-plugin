@@ -12,7 +12,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -50,12 +49,25 @@ class NotificarePushPlugin : CordovaPlugin() {
         val intent = cordova.activity.intent
         if (intent != null) onNewIntent(intent)
 
-        val activity = cordova.activity ?: run {
-            NotificareLogger.warning("Unable to acquire a reference to the current activity.")
-            return
-        }
+        notificationsPermissionLauncher = cordova.activity.registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (granted) {
+                permissionRequestCallback?.success(PermissionStatus.GRANTED.rawValue)
+            } else {
+                if (!shouldShowRationale &&
+                    !ActivityCompat.shouldShowRequestPermissionRationale(cordova.activity, PUSH_PERMISSION)
+                ) {
+                    permissionRequestCallback?.success(PermissionStatus.PERMANENTLY_DENIED.rawValue)
+                } else {
+                    permissionRequestCallback?.success(PermissionStatus.DENIED.rawValue)
+                }
+            }
 
-        setPermissionLauncher(activity)
+            shouldShowRationale = false
+            hasOnGoingPermissionRequest = false
+            permissionRequestCallback = null
+        }
     }
 
     override fun onDestroy() {
@@ -93,28 +105,6 @@ class NotificarePushPlugin : CordovaPlugin() {
         }
 
         return true
-    }
-
-    private fun setPermissionLauncher(activity: AppCompatActivity) {
-        notificationsPermissionLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { granted ->
-            if (granted) {
-                permissionRequestCallback?.success(PermissionStatus.GRANTED.rawValue)
-            } else {
-                if (!shouldShowRationale &&
-                    !ActivityCompat.shouldShowRequestPermissionRationale(activity, PUSH_PERMISSION)
-                ) {
-                    permissionRequestCallback?.success(PermissionStatus.PERMANENTLY_DENIED.rawValue)
-                } else {
-                    permissionRequestCallback?.success(PermissionStatus.DENIED.rawValue)
-                }
-            }
-
-            shouldShowRationale = false
-            hasOnGoingPermissionRequest = false
-            permissionRequestCallback = null
-        }
     }
 
     // region Notificare Push
@@ -242,13 +232,8 @@ class NotificarePushPlugin : CordovaPlugin() {
             return
         }
 
-        val context = cordova.context ?: run {
-            callback.error("Cannot continue without a context.")
-            return
-        }
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            val granted = NotificationManagerCompat.from(context.applicationContext).areNotificationsEnabled()
+            val granted = NotificationManagerCompat.from(activity.applicationContext).areNotificationsEnabled()
             callback.success(if (granted) PermissionStatus.GRANTED.rawValue else PermissionStatus.PERMANENTLY_DENIED.rawValue)
             return
         }
@@ -259,7 +244,7 @@ class NotificarePushPlugin : CordovaPlugin() {
             return
         }
 
-        val granted = ContextCompat.checkSelfPermission(context, PUSH_PERMISSION) == PackageManager.PERMISSION_GRANTED
+        val granted = ContextCompat.checkSelfPermission(activity, PUSH_PERMISSION) == PackageManager.PERMISSION_GRANTED
 
         if (granted) {
             callback.success(PermissionStatus.GRANTED.rawValue)

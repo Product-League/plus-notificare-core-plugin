@@ -15,7 +15,7 @@ class NotificarePushPluginEventBroker {
         canEmitEvents = !holdEventsUntilReady || Notificare.shared.isReady
 
         if (!canEmitEvents) {
-            NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificareReady), name: Notification.Name("re.notifica.cordova.notificare_is_ready"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificareReady), name: Notification.Name("re.notifica.cordova.on_ready"), object: nil)
             return
         }
 
@@ -25,8 +25,8 @@ class NotificarePushPluginEventBroker {
     static func dispatchEvent(name: String, payload: Any?) {
         let event = Event(name: name, payload: payload)
 
-        if consumer != nil && canEmitEvents {
-            consumer!(event)
+        if let consumer = consumer, canEmitEvents {
+            consumer(event)
             return
         }
 
@@ -39,9 +39,7 @@ class NotificarePushPluginEventBroker {
             return
         }
 
-        if eventQueue.isEmpty {
-            return
-        }
+        guard !eventQueue.isEmpty else { return }
 
         NotificareLogger.debug("Processing event queue with ${eventQueue.size} items.")
         eventQueue.forEach { consumer($0) }
@@ -49,9 +47,7 @@ class NotificarePushPluginEventBroker {
     }
 
     @objc static func onNotificareReady() {
-        if canEmitEvents {
-            return
-        }
+        NotificationCenter.default.removeObserver(self)
 
         canEmitEvents = true
         processQueue()

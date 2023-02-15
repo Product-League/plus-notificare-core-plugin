@@ -53,6 +53,8 @@ internal object NotificarePushPluginEventBroker : Notificare.Listener {
     }
 
     override fun onReady(application: NotificareApplication) {
+        // Run the listener removal on the next loop to prevent modifying the collection
+        // while iterating on it, causing an exception.
         Handler(Looper.getMainLooper()).post {
             Notificare.removeListener(this)
         }

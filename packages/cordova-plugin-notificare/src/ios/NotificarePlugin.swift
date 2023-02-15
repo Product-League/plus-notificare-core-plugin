@@ -389,12 +389,11 @@ extension NotificarePlugin: NotificareDelegate {
             )
         } catch {
             NotificareLogger.error("Failed to emit the ready event.", error: error)
-            return
         }
 
         let holdEventsUntilReady = commandDelegate.settings["re.notifica.cordova.hold_events_until_ready"] as? String
         if holdEventsUntilReady == "true" {
-            NotificationCenter.default.post(name: Notification.Name("re.notifica.cordova.notificare_is_ready"), object: nil)
+            NotificationCenter.default.post(name: Notification.Name("re.notifica.cordova.on_ready"), object: nil)
         }
     }
 

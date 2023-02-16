@@ -360,7 +360,7 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareGeoPluginEventBroker.setup(object : NotificareGeoPluginEventBroker.Consumer {
+        NotificareGeoPluginEventBroker.setup(preferences, object : NotificareGeoPluginEventBroker.Consumer {
             override fun onEvent(event: NotificareGeoPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)

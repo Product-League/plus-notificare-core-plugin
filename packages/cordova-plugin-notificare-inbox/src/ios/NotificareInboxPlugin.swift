@@ -11,7 +11,7 @@ class NotificareInboxPlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificareInboxPluginEventBroker.startListening { event in
+        NotificareInboxPluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]

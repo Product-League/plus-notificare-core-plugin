@@ -11,7 +11,7 @@ class NotificarePushPlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificarePushPluginEventBroker.startListening { event in
+        NotificarePushPluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]

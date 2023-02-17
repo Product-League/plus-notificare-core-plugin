@@ -28,7 +28,7 @@ class NotificareGeoPlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificareGeoPluginEventBroker.startListening { event in
+        NotificareGeoPluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]

@@ -185,7 +185,7 @@ class NotificarePushUIPlugin : CordovaPlugin(), NotificarePushUI.NotificationLif
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificarePushUIPluginEventBroker.setup(object : NotificarePushUIPluginEventBroker.Consumer {
+        NotificarePushUIPluginEventBroker.setup(preferences, object : NotificarePushUIPluginEventBroker.Consumer {
             override fun onEvent(event: NotificarePushUIPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)

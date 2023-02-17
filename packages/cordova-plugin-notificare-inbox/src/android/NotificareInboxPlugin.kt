@@ -187,7 +187,7 @@ class NotificareInboxPlugin : CordovaPlugin() {
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareInboxPluginEventBroker.setup(object : NotificareInboxPluginEventBroker.Consumer {
+        NotificareInboxPluginEventBroker.setup(preferences, object : NotificareInboxPluginEventBroker.Consumer {
             override fun onEvent(event: NotificareInboxPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)

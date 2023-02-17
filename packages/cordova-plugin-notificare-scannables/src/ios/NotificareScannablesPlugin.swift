@@ -17,7 +17,7 @@ class NotificareScannablesPlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificareScannablesPluginEventBroker.startListening { event in
+        NotificareScannablesPluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]

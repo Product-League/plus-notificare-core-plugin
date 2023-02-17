@@ -11,7 +11,7 @@ class NotificareAuthenticationPlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificareAuthenticationPluginEventBroker.startListening { event in
+        NotificareAuthenticationPluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]

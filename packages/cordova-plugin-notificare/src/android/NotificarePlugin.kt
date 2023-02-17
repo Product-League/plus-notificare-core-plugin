@@ -408,7 +408,7 @@ class NotificarePlugin : CordovaPlugin() {
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificarePluginEventBroker.setup(object : NotificarePluginEventBroker.Consumer {
+        NotificarePluginEventBroker.setup(preferences, object : NotificarePluginEventBroker.Consumer {
             override fun onEvent(event: NotificarePluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)

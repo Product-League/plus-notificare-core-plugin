@@ -23,8 +23,6 @@
         <preference name="GradleVersion" value="7.4" />
         <preference name="AndroidGradlePluginVersion" value="7.3.1" />
         <preference name="GradlePluginKotlinVersion" value="1.6.21" />
-        <preference name="GradlePluginGoogleServicesEnabled" value="true" />
-        <preference name="GradlePluginGoogleServicesVersion" value="4.3.14" />
 
         <allow-intent href="market:*" />
 
@@ -46,11 +44,6 @@
         </edit-config>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity/[@android:name='MainActivity']">
-            <intent-filter>
-                <action android:name="re.notifica.intent.action.RemoteMessageOpened" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

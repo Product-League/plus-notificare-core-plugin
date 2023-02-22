@@ -11,7 +11,7 @@ class NotificareMonetizePlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificareMonetizePluginEventBroker.startListening { event in
+        NotificareMonetizePluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]
@@ -78,7 +78,7 @@ class NotificareMonetizePlugin : CDVPlugin {
 
             return
         }
-        
+
         Notificare.shared.monetize().startPurchaseFlow(for: product)
 
         let result = CDVPluginResult(status: .ok)
@@ -97,7 +97,7 @@ extension NotificareMonetizePlugin: NotificareMonetizeDelegate {
             NotificareLogger.error("Failed to emit the products_updated event.", error: error)
         }
     }
-    
+
     func notificare(_ notificareMonetize: NotificareMonetize, didUpdatePurchases purchases: [NotificarePurchase]) {
         do {
             NotificareMonetizePluginEventBroker.dispatchEvent(
@@ -108,7 +108,7 @@ extension NotificareMonetizePlugin: NotificareMonetizeDelegate {
             NotificareLogger.error("Failed to emit the purchases_updated event.", error: error)
         }
     }
-    
+
     func notificare(_ notificareMonetize: NotificareMonetize, didFinishPurchase purchase: NotificarePurchase) {
         do {
             NotificareMonetizePluginEventBroker.dispatchEvent(
@@ -119,7 +119,7 @@ extension NotificareMonetizePlugin: NotificareMonetizeDelegate {
             NotificareLogger.error("Failed to emit the purchase_finished event.", error: error)
         }
     }
-    
+
     func notificare(_ notificareMonetize: NotificareMonetize, didRestorePurchase purchase: NotificarePurchase) {
         do {
             NotificareMonetizePluginEventBroker.dispatchEvent(
@@ -130,11 +130,11 @@ extension NotificareMonetizePlugin: NotificareMonetizeDelegate {
             NotificareLogger.error("Failed to emit the purchase_restored event.", error: error)
         }
     }
-    
+
     func notificareDidCancelPurchase(_ notificareMonetize: NotificareMonetize) {
         NotificareMonetizePluginEventBroker.dispatchEvent(name: "purchase_canceled", payload: nil)
     }
-    
+
     func notificare(_ notificareMonetize: NotificareMonetize, didFailToPurchase error: Error) {
         NotificareMonetizePluginEventBroker.dispatchEvent(
             name: "purchase_failed",

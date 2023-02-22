@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin id="cordova-plugin-notificare-scannables"
-        version="3.4.2"
+        version="3.5.0"
         xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -18,7 +18,7 @@
             <preference name="AndroidXEnabled" value="true" />
 
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <preference name="GradlePluginKotlinVersion" value="1.6.10" />
+            <preference name="GradlePluginKotlinVersion" value="1.6.21" />
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/widget">
@@ -64,7 +64,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareScannablesKit" spec="3.4.2" />
+                <pod name="Notificare/NotificareScannablesKit" spec="3.5.0" />
             </pods>
         </podspec>
     </platform>

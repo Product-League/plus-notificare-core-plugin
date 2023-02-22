@@ -121,7 +121,7 @@ class NotificareScannablesPlugin : CordovaPlugin(), NotificareScannables.Scannab
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareScannablesPluginEventBroker.setup(object : NotificareScannablesPluginEventBroker.Consumer {
+        NotificareScannablesPluginEventBroker.setup(preferences, object : NotificareScannablesPluginEventBroker.Consumer {
             override fun onEvent(event: NotificareScannablesPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)

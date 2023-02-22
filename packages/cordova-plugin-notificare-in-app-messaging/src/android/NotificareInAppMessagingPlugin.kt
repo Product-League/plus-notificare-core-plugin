@@ -48,8 +48,15 @@ class NotificareInAppMessagingPlugin : CordovaPlugin(), NotificareInAppMessaging
     private fun setMessagesSuppressed(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
         try {
             val suppressed = args.getBoolean(0)
+            val evaluateContext =
+                if (!args.isNull(1)) {
+                    args.getBoolean(1)
+                } else {
+                    false
+                }
 
-            Notificare.inAppMessaging().hasMessagesSuppressed = suppressed
+            Notificare.inAppMessaging().setMessagesSuppressed(suppressed, evaluateContext)
+
             callback.void()
         } catch (e: Exception) {
             callback.error(e.message)
@@ -119,7 +126,7 @@ class NotificareInAppMessagingPlugin : CordovaPlugin(), NotificareInAppMessaging
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareInAppMessagingPluginEventBroker.setup(object : NotificareInAppMessagingPluginEventBroker.Consumer {
+        NotificareInAppMessagingPluginEventBroker.setup(preferences, object : NotificareInAppMessagingPluginEventBroker.Consumer {
             override fun onEvent(event: NotificareInAppMessagingPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)

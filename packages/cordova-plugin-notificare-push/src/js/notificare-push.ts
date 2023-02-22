@@ -1,6 +1,8 @@
 import { EventSubscription } from './events';
 import { NotificareNotification, NotificareNotificationAction } from 'cordova-plugin-notificare';
 import { NotificareSystemNotification } from './models/notificare-system-notification';
+import { NotificareNotificationDeliveryMechanism } from './models/notificare-notification-delivery-mechanism';
+import { PushPermissionRationale, PushPermissionStatus } from './permissions';
 
 export class NotificarePush {
   public static async setAuthorizationOptions(options: string[]): Promise<void> {
@@ -45,10 +47,56 @@ export class NotificarePush {
     });
   }
 
+  //
+  // Permission utilities
+  //
+
+  public static async checkPermissionStatus(): Promise<PushPermissionStatus> {
+    return new Promise<PushPermissionStatus>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificarePush', 'checkPermissionStatus', []);
+    });
+  }
+
+  public static async shouldShowPermissionRationale(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificarePush', 'shouldShowPermissionRationale', []);
+    });
+  }
+
+  public static async presentPermissionRationale(rationale: PushPermissionRationale): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificarePush', 'presentPermissionRationale', [rationale]);
+    });
+  }
+
+  public static async requestPermission(): Promise<PushPermissionStatus> {
+    return new Promise<PushPermissionStatus>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificarePush', 'requestPermission', []);
+    });
+  }
+
+  public static async openAppSettings(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      cordova.exec(resolve, reject, 'NotificarePush', 'openAppSettings', []);
+    });
+  }
+
   // region Events
 
+  /**
+   * @deprecated Listen to onNotificationInfoReceived(notification, deliveryMechanism) instead.
+   */
   public static onNotificationReceived(callback: (notification: NotificareNotification) => void): EventSubscription {
     return new EventSubscription('notification_received', callback);
+  }
+
+  public static onNotificationInfoReceived(
+    callback: (data: {
+      notification: NotificareNotification;
+      deliveryMechanism: NotificareNotificationDeliveryMechanism;
+    }) => void
+  ): EventSubscription {
+    return new EventSubscription('notification_info_received', callback);
   }
 
   public static onSystemNotificationReceived(

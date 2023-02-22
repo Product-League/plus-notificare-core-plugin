@@ -28,7 +28,7 @@ class NotificareGeoPlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificareGeoPluginEventBroker.startListening { event in
+        NotificareGeoPluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]
@@ -100,17 +100,31 @@ class NotificareGeoPlugin : CDVPlugin {
             return
         }
 
-        guard permission != .bluetoothScan else {
-            let result = CDVPluginResult(status: .ok, messageAs: PermissionStatus.granted.rawValue)
+        let status = checkPermissionStatus(permission)
+
+        if status == .granted || status == .permanentlyDenied || status == .restricted {
+            let result = CDVPluginResult(status: .ok, messageAs: status.rawValue)
             self.commandDelegate!.send(result, callbackId: command.callbackId)
             return
         }
 
-        let status = checkPermissionStatus(permission)
+        if permission == .locationWhenInUse {
+            if ((Bundle.main.infoDictionary?["NSLocationWhenInUseUsageDescription"]) == nil) {
+                let result = CDVPluginResult(status: .error, messageAs: "Missing 'NSLocationWhenInUseUsageDescription' in the app bundle's Info.plist file.")
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
+                return
+            }
+        }
 
-        if permission == .locationAlways && authorizationStatus == .authorizedWhenInUse {
-            if UserDefaults.standard.bool(forKey: REQUESTED_LOCATION_ALWAYS_KEY) {
-                let result = CDVPluginResult(status: .ok, messageAs: status.rawValue)
+        if permission == .locationAlways {
+            if (Bundle.main.infoDictionary?["NSLocationAlwaysAndWhenInUseUsageDescription"]) == nil {
+                let result = CDVPluginResult(status: .error, messageAs: "Missing 'NSLocationAlwaysAndWhenInUseUsageDescription' in the app bundle's Info.plist file.")
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
+                return
+            }
+
+            if authorizationStatus == .notDetermined {
+                let result = CDVPluginResult(status: .error, messageAs: "Location 'When in Use' should be requested before 'Location Always' request.")
                 self.commandDelegate!.send(result, callbackId: command.callbackId)
                 return
             }
@@ -120,9 +134,16 @@ class NotificareGeoPlugin : CDVPlugin {
         requestedPermissionCall = command
 
         if permission == .locationWhenInUse {
-            self.locationManager.requestWhenInUseAuthorization()
+            locationManager.requestWhenInUseAuthorization()
         } else if permission == .locationAlways {
-            self.locationManager.requestAlwaysAuthorization()
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(applicationDidBecomeActive),
+                name: UIApplication.didBecomeActiveNotification,
+                object: nil
+            )
+
+            locationManager.requestAlwaysAuthorization()
             UserDefaults.standard.set(true, forKey: REQUESTED_LOCATION_ALWAYS_KEY)
         }
     }
@@ -149,6 +170,26 @@ class NotificareGeoPlugin : CDVPlugin {
 
     // MARK: - Private API
 
+    @objc private func applicationDidBecomeActive() {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+
+        guard let requestedPermissionCall = requestedPermissionCall else {
+            return
+        }
+
+        if authorizationStatus != .authorizedAlways {
+            let result = CDVPluginResult(status: .ok, messageAs: PermissionStatus.denied.rawValue)
+            self.commandDelegate!.send(result, callbackId: requestedPermissionCall.callbackId)
+
+            self.requestedPermission = nil
+            self.requestedPermissionCall = nil
+        }
+    }
+
     private func checkPermissionStatus(_ permission: PermissionGroup) -> PermissionStatus {
         guard permission != .bluetoothScan else {
             return .granted
@@ -170,6 +211,8 @@ class NotificareGeoPlugin : CDVPlugin {
                 return UserDefaults.standard.bool(forKey: REQUESTED_LOCATION_ALWAYS_KEY) ? .permanentlyDenied : .denied
             case .authorizedAlways:
                 return .granted
+            @unknown default:
+                return .denied
             }
         }
 
@@ -182,6 +225,8 @@ class NotificareGeoPlugin : CDVPlugin {
             return .permanentlyDenied
         case .authorizedWhenInUse, .authorizedAlways:
             return .granted
+        @unknown default:
+            return .denied
         }
     }
 }
@@ -305,8 +350,16 @@ extension NotificareGeoPlugin: CLLocationManagerDelegate {
 
         let status = determinePermissionStatus(requestedPermission, authorizationStatus: authorizationStatus)
 
-        let result = CDVPluginResult(status: .ok, messageAs: status.rawValue)
-        self.commandDelegate!.send(result, callbackId: requestedPermissionCall.callbackId)
+        // If status is 'Permanently Denied' we will consider that result as 'Denied' because the permission just changed
+        // This will only affect 'When in Use' permission
+
+        if status == .permanentlyDenied {
+            let result = CDVPluginResult(status: .ok, messageAs: PermissionStatus.denied.rawValue)
+            self.commandDelegate!.send(result, callbackId: requestedPermissionCall.callbackId)
+        } else {
+            let result = CDVPluginResult(status: .ok, messageAs: status.rawValue)
+            self.commandDelegate!.send(result, callbackId: requestedPermissionCall.callbackId)
+        }
 
         self.requestedPermission = nil
         self.requestedPermissionCall = nil

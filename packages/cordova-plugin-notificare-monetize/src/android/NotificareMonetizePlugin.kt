@@ -192,7 +192,7 @@ class NotificareMonetizePlugin : CordovaPlugin(), NotificareMonetize.Listener {
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareMonetizePluginEventBroker.setup(object : NotificareMonetizePluginEventBroker.Consumer {
+        NotificareMonetizePluginEventBroker.setup(preferences, object : NotificareMonetizePluginEventBroker.Consumer {
             override fun onEvent(event: NotificareMonetizePluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)

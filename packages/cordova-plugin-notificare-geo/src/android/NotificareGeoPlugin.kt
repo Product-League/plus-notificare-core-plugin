@@ -34,6 +34,7 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
         private val TAG = NotificareGeoPlugin::class.java.simpleName
     }
 
+    private var shouldShowRationale = false
     private var hasOnGoingPermissionRequest = false
     private var permissionRequestCallback: CallbackContext? = null
 
@@ -47,7 +48,22 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
         ) { permissions ->
             val status = permissions
                 .all { it.value }
-                .let { granted -> if (granted) PermissionStatus.GRANTED else PermissionStatus.DENIED }
+                .let { granted ->
+                    if (granted) {
+                        PermissionStatus.GRANTED
+                    } else {
+                        if (!shouldShowRationale &&
+                            !ActivityCompat.shouldShowRequestPermissionRationale(
+                                cordova.activity,
+                                permissions.keys.first()
+                            )
+                        ) {
+                            PermissionStatus.PERMANENTLY_DENIED
+                        } else {
+                            PermissionStatus.DENIED
+                        }
+                    }
+                }
 
             permissionRequestCallback?.success(status.rawValue)
             permissionRequestCallback = null
@@ -110,17 +126,16 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
             return
         }
 
-        val permission = args.getString(0)
-            .let { str ->
-                if (str == null) {
-                    callback.error("Missing permission parameter.")
+        val permission =
+            if (!args.isNull(0)) {
+                val parameter = args.getString(0)
+                PermissionGroup.parse(parameter) ?: run {
+                    callback.error("Unsupported permission parameter: $parameter")
                     return
                 }
-
-                PermissionGroup.parse(str) ?: run {
-                    callback.error("Unsupported permission parameter: $str")
-                    return
-                }
+            } else {
+                callback.error("Missing permission parameter.")
+                return
             }
 
         val status = determinePermissionStatus(context, permission)
@@ -131,31 +146,25 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
         @Suppress("UNUSED_PARAMETER") args: CordovaArgs,
         callback: CallbackContext
     ) {
-        val context = cordova.context ?: run {
-            callback.error("Cannot continue without a context.")
-            return
-        }
-
-        val permission = args.getString(0)
-            .let { str ->
-                if (str == null) {
-                    callback.error("Missing permission parameter.")
-                    return
-                }
-
-                PermissionGroup.parse(str) ?: run {
-                    callback.error("Unsupported permission parameter: $str")
-                    return
-                }
-            }
-
         val activity = cordova.activity ?: run {
             NotificareLogger.warning("Unable to acquire a reference to the current activity.")
             callback.error("Unable to acquire a reference to the current activity.")
             return
         }
 
-        val manifestPermissions = getManifestPermissions(context, permission)
+        val permission =
+            if (!args.isNull(0)) {
+                val parameter = args.getString(0)
+                PermissionGroup.parse(parameter) ?: run {
+                    callback.error("Unsupported permission parameter: $parameter")
+                    return
+                }
+            } else {
+                callback.error("Missing permission parameter.")
+                return
+            }
+
+        val manifestPermissions = getManifestPermissions(activity, permission)
 
         if (manifestPermissions.isEmpty()) {
             NotificareLogger.warning("No permissions found in the manifest for $permission")
@@ -168,32 +177,40 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
     }
 
     private fun presentPermissionRationale(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val permission = args.getString(0)
-            .let { str ->
-                if (str == null) {
-                    callback.error("Missing permission parameter.")
-                    return
-                }
-
-                PermissionGroup.parse(str) ?: run {
-                    callback.error("Unsupported permission parameter: $str")
-                    return
-                }
-            }
-
-        val rationale = args.getJSONObject(1) ?: run {
-            callback.error("Missing rationale parameter.")
-            return
-        }
-
         val activity = cordova.activity ?: run {
             NotificareLogger.warning("Unable to acquire a reference to the current activity.")
             callback.error("Unable to acquire a reference to the current activity.")
             return
         }
 
+        val permission =
+            if (!args.isNull(0)) {
+                val parameter = args.getString(0)
+                PermissionGroup.parse(parameter) ?: run {
+                    callback.error("Unsupported permission parameter: $parameter")
+                    return
+                }
+            } else {
+                callback.error("Missing permission parameter.")
+                return
+            }
+
+        val rationale =
+            if (!args.isNull(1)) {
+                args.getJSONObject(1)
+            } else {
+                callback.error("Missing rationale parameter.")
+                return
+            }
+
         val title = if (!rationale.isNull("title")) rationale.getString("title") else null
-        val message = rationale.getString("message")
+        val message =
+            if (!rationale.isNull("message")) {
+                rationale.getString("message")
+            } else {
+                callback.error("Missing message parameter.")
+                return
+            }
         val buttonText =
             if (!rationale.isNull("buttonText")) rationale.getString("buttonText")
             else activity.getString(android.R.string.ok)
@@ -201,35 +218,36 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
         try {
             NotificareLogger.debug("Presenting permission rationale for '$permission'.")
 
-            AlertDialog.Builder(activity)
-                .setTitle(title)
-                .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton(buttonText, null)
-                .setOnDismissListener { callback.success() }
-                .show()
+            activity.runOnUiThread {
+                AlertDialog.Builder(activity)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(buttonText, null)
+                    .setOnDismissListener { callback.success() }
+                    .show()
+            }
         } catch (e: Exception) {
             callback.error("Unable to present the rationale alert.")
         }
     }
 
     private fun requestPermission(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        val context = cordova.context ?: run {
-            callback.error("Cannot continue without a context.")
+        val activity = cordova.activity ?: run {
+            callback.error("Cannot continue without a activity.")
             return
         }
 
-        val permission = args.getString(0)
-            .let { str ->
-                if (str == null) {
-                    callback.error("Missing permission parameter.")
+        val permission =
+            if (!args.isNull(0)) {
+                val parameter = args.getString(0)
+                PermissionGroup.parse(parameter) ?: run {
+                    callback.error("Unsupported permission parameter: $parameter")
                     return
                 }
-
-                PermissionGroup.parse(str) ?: run {
-                    callback.error("Unsupported permission parameter: $str")
-                    return
-                }
+            } else {
+                callback.error("Missing permission parameter.")
+                return
             }
 
         if (hasOnGoingPermissionRequest) {
@@ -238,13 +256,13 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
             return
         }
 
-        val status = determinePermissionStatus(context, permission)
+        val status = determinePermissionStatus(activity, permission)
         if (status == PermissionStatus.GRANTED) {
             callback.success(status.rawValue)
             return
         }
 
-        val manifestPermissions = getManifestPermissions(context, permission)
+        val manifestPermissions = getManifestPermissions(activity, permission)
 
         if (manifestPermissions.isEmpty()) {
             NotificareLogger.warning("No permissions found in the manifest for $permission")
@@ -252,6 +270,7 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
             return
         }
 
+        shouldShowRationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, manifestPermissions.first())
         hasOnGoingPermissionRequest = true
         permissionRequestCallback = callback
 
@@ -341,7 +360,7 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
     // endregion
 
     private fun registerListener(@Suppress("UNUSED_PARAMETER") args: CordovaArgs, callback: CallbackContext) {
-        NotificareGeoPluginEventBroker.setup(object : NotificareGeoPluginEventBroker.Consumer {
+        NotificareGeoPluginEventBroker.setup(preferences, object : NotificareGeoPluginEventBroker.Consumer {
             override fun onEvent(event: NotificareGeoPluginEventBroker.Event) {
                 val payload = JSONObject()
                 payload.put("name", event.name)
@@ -433,7 +452,14 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
 
     private fun hasPermissionInManifest(context: Context, permission: String): Boolean {
         try {
-            val info = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
+            val info = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS.toLong())
+                )
+            } else {
+                context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_PERMISSIONS)
+            }
             if (info == null) {
                 Log.d(TAG, "Unable to get Package info, will not be able to determine permissions to request.")
                 return false
@@ -490,14 +516,12 @@ class NotificareGeoPlugin : CordovaPlugin(), NotificareGeo.Listener {
     internal enum class PermissionStatus {
         DENIED,
         GRANTED,
-        RESTRICTED,
         PERMANENTLY_DENIED;
 
         internal val rawValue: String
             get() = when (this) {
                 DENIED -> "denied"
                 GRANTED -> "granted"
-                RESTRICTED -> "restricted"
                 PERMANENTLY_DENIED -> "permanently_denied"
             }
 

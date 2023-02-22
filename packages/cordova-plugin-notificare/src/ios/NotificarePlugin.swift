@@ -31,7 +31,7 @@ class NotificarePlugin : CDVPlugin {
     }
 
     @objc func registerListener(_ command: CDVInvokedUrlCommand) {
-        NotificarePluginEventBroker.startListening { event in
+        NotificarePluginEventBroker.startListening(settings: commandDelegate.settings) { event in
             var payload: [String: Any] = [
                 "name": event.name,
             ]
@@ -389,6 +389,11 @@ extension NotificarePlugin: NotificareDelegate {
             )
         } catch {
             NotificareLogger.error("Failed to emit the ready event.", error: error)
+        }
+
+        let holdEventsUntilReady = commandDelegate.settings["re.notifica.cordova.hold_events_until_ready"] as? String
+        if holdEventsUntilReady == "true" {
+            NotificationCenter.default.post(name: Notification.Name("re.notifica.cordova.on_ready"), object: nil)
         }
     }
 

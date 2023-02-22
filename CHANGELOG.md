@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 3.5.0
+
+- Add user-level inbox module
+- Allow a context evaluation upon un-suppressing in-app messages
+- Include the delivery mechanism for notification received events
+- Add push permission utilities and improved overall permission handling
+- Add customisation option to delay the event emitter until `on_ready`
+
 ## 3.4.2
 
 #### Native changes

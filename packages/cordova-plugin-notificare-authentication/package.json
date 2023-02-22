@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-notificare-authentication",
-  "version": "3.4.2",
+  "version": "3.5.0",
   "description": "Notificare Authentication Cordova Plugin.",
   "author": "Notificare <info@notifica.re> (https://notificare.com)",
   "license": "MIT",
@@ -40,10 +40,10 @@
     "docs:replace-symbolic-links": "rm README.md CHANGELOG.md MIGRATION.md; cp ../../README.md ../../CHANGELOG.md ../../MIGRATION.md ."
   },
   "peerDependencies": {
-    "cordova-plugin-notificare": "3.4.2"
+    "cordova-plugin-notificare": "3.5.0"
   },
   "devDependencies": {
-    "cordova-plugin-notificare": "3.4.2"
+    "cordova-plugin-notificare": "3.5.0"
   },
   "cordova": {
     "id": "cordova-plugin-notificare-authentication",

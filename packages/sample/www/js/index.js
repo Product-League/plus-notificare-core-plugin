@@ -96,6 +96,9 @@ function onDeviceReady() {
       // Push
       //
 
+      console.log('---> Requesting Notifications Permission');
+      await NotificarePush.requestPermission();
+
       console.log(`---> Remote notifications enabled = ${await NotificarePush.hasRemoteNotificationsEnabled()}`);
       await NotificarePush.enableRemoteNotifications();
       console.log(`---> Remote notifications enabled = ${await NotificarePush.hasRemoteNotificationsEnabled()}`);
@@ -110,20 +113,23 @@ function onDeviceReady() {
       console.log(`---> Items = ${(await NotificareInbox.getItems()).length}`);
 
       //
+      // Geo
+      //
+
+      console.log(`---> Location services enabled = ${await NotificareGeo.hasLocationServicesEnabled()}`);
+      console.log(`---> Bluetooth enabled = ${await NotificareGeo.hasBluetoothEnabled()}`);
+      await NotificareGeo.requestPermission('location_when_in_use');
+      await NotificareGeo.requestPermission('location_always');
+      await NotificareGeo.requestPermission('bluetooth_scan');
+      await NotificareGeo.enableLocationUpdates();
+
+      //
       // Assets
       //
 
       const assets = await NotificareAssets.fetch('LANDSCAPES');
       console.log('---> Assets');
       console.log(JSON.stringify(assets, null, 2));
-
-      //
-      // Geo
-      //
-
-      console.log(`---> Location services enabled = ${await NotificareGeo.hasLocationServicesEnabled()}`);
-      console.log(`---> Bluetooth enabled = ${await NotificareGeo.hasBluetoothEnabled()}`);
-      await NotificareGeo.enableLocationUpdates();
 
       //
       // Loyalty

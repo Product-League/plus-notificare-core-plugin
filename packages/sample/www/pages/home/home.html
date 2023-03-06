@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src self'; img-src * data: content:;" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover" />
+    <link rel="stylesheet" href="../../css/home.css" />
+    <link rel="shortcut icon" href="../../res/favicon.ico" />
+    <title>Sample</title>
+</head>
+<body>
+<div class="app">
+    <div class="event received">
+        <button onclick="statusNotificare()">Notificare Status</button>
+        <button onclick="launchNotificare()">Launch Notificare</button>
+        <button onclick="unlaunchNotificare()">Unlaunch Notificare</button>
+
+        <h1>Geo</h1>
+        <button onclick="requestLocationPermissions()">Request Location & Bluetooth Permission</button>
+        <button onclick="checkLocationPermissionsStatus()">Check Permissions Status</button>
+        <button onclick="enableLocationUpdates()">Enable Location Updates</button>
+        <button onclick="disableLocationUpdates()">Disable Location Updates</button>
+        <button onclick="rangingBeacons()">Ranging Beacons</button>
+
+        <h1>Push</h1>
+        <button onclick="requestNotificationsPermission()">Request Notifications Permission</button>
+        <button onclick="checkNotificationsPermissionsStatus()">Check Notifications Permission Status</button>
+        <button onclick="enableRemoteNotifications()">Enable Remote Notifications</button>
+        <button onclick="disbaleRemoteNotifications()">Disable Remote Notifications</button>
+        <button onclick="openInbox()">Open Inbox</button>
+        <button onclick="fetchTags()">Fetch Tags</button>
+        <button onclick="addTags()">Add Tags</button>
+        <button onclick="removeTags()">Remove Tags</button>
+        <button onclick="clearTags()">Clear Tags</button>
+        <button onclick="fetchDoNotDisturb()">Fetch DND</button>
+        <button onclick="updateDoNotDisturb()">Update DND</button>
+        <button onclick="clearDoNotDisturb()">Clear DND</button>
+        <button onclick="fetchUserData()">Fetch User Data</button>
+        <button onclick="updateUserData()">Update User Data</button>
+        <button onclick="fetchPreferredLanguage()">Get Preferred Language</button>
+        <button onclick="updatePreferredLanguage()">Update Preferred Language 'NL'</button>
+        <button onclick="clearPreferredLanguage()">Clear Preferred Language</button>
+        <button onclick="fetchNotification()">Fetch Notification</button>
+
+        <h1>Assets</h1>
+        <button onclick="fetchAssets()">Fetch Assets</button>
+
+        <h1>Scannables</h1>
+        <button onclick="startScannableSession()">Start Scannable Session</button>
+
+        <h1>Authentication</h1>
+        <button onclick="createUserAccount()">Create User Account</button>
+        <button onclick="login()">Login</button>
+        <button onclick="logout()">Logout</button>
+        <button onclick="fetchUserDetails()">Fetch User Details</button>
+        <button onclick="fetchUserPreferences()">Fetch User Preferences</button>
+        <button onclick="fetchUserSegments()">Fetch User Segments</button>
+        <button onclick="sendPasswordReset()">Send Password Reset</button>
+        <button onclick="resetPassword()">Reset Password</button>
+        <button onclick="changePassword()">Change Password</button>
+        <button onclick="validateUser()">Validate User</button>
+        <button onclick="generatePushEmail()">Generate Push Email</button>
+        <button onclick="addUserSegment()">Add User Segment</button>
+        <button onclick="removeUserSegment()">Remove User Segment</button>
+        <button onclick="addUserSegmentToPreference()">Add User Segment to Preference</button>
+        <button onclick="removeUserSegmentToPreference()">Remove User Segment from Preference</button>
+
+        <h1>Loyalty</h1>
+        <button onclick="fetchPass()">Fetch Pass</button>
+
+        <h1>Monetize</h1>
+        <button onclick="refresh()">Refresh</button>
+        <button onclick="getProducts()">Get Products</button>
+        <button onclick="getPurchases()">Get Purchases</button>
+        <button onclick="startPurchase()">Start Purchase Products</button>
+
+        <h1>In-app messaging</h1>
+        <button onclick="checkSuppressedState()">Suppress Messages State</button>
+        <button onclick="suppressMessages()">Suppress Messages</button>
+        <button onclick="unSuppressMessages()">Un-suppress Messages</button>
+        <button onclick="unSuppressMessagesAndEvaluateContext()">Un-suppress and Evaluate Content</button>
+    </div>
+</div>
+<script src="../../cordova.js"></script>
+<script src="../../events/listeners.js"></script>
+<script src="home.js"></script>
+</body>
+</html>

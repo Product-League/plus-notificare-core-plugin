@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="re.notifica.sample.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>HelloCordova</name>
+    <name>Sample</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A simplified fashion application to demonstrate Notificare basic features.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
+    <author email="support@notifica.re" href="https://notificare.com">
         Apache Cordova Team
     </author>
     <content src="index.html" />
@@ -53,9 +53,17 @@
                 <data android:scheme="${applicationId}" />
             </intent-filter>
         </config-file>
+
+        <resource-file src="res/android/values/ic_launcher_background.xml" target="/app/src/main/res/values/ic_launcher_background.xml" />
+
+        <icon background="@color/ic_launcher_background" density="hdpi" foreground="res/android/drawable/ic_launcher_foreground.xml" src="res/icon.png"/>
     </platform>
+
     <platform name="ios">
         <preference name="SwiftVersion" value="5" />
+        <preference name="AllowBackForwardNavigationGestures" value="true" />
+        <preference name="deployment-target" value="11.0" />
+        <preference name="BackupWebStorage" value="none"/>
 
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
@@ -101,5 +109,26 @@
         <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
             <string>We may need to access your photos to reply to notifications.</string>
         </config-file>
+
+        <icon src="res/ios/icon_20pt.jpg" width="20" height="20" />
+        <icon src="res/ios/icon_20pt@2x.jpg" width="40" height="40" />
+        <icon src="res/ios/icon_20pt@3x.jpg" width="60" height="60" />
+
+        <icon src="res/ios/icon_29pt.jpg" width="29" height="29" />
+        <icon src="res/ios/icon_29pt@2x.jpg" width="58" height="58" />
+        <icon src="res/ios/icon_29pt@3x.jpg" width="87" height="87" />
+
+        <icon src="res/ios/icon_40pt@2x.jpg" width="80" height="80" />
+        <icon src="res/ios/icon_40pt@3x.jpg" width="120" height="120" />
+
+        <icon src="res/ios/icon_60pt@3x.jpg" width="180" height="180" />
+
+        <icon src="res/ios/icon_76pt.jpg" width="76" height="76" />
+        <icon src="res/ios/icon_76pt@2x.jpg" width="152" height="152" />
+
+        <icon src="res/ios/icon_83.5@2x.jpg" width="167" height="167" />
+
+        <icon src="res/ios/icon.jpg" width="1024" height="1024" />
+
     </platform>
 </widget>

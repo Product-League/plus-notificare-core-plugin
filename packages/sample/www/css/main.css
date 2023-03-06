@@ -1,0 +1,69 @@
+* {
+    -webkit-tap-highlight-color: rgba(43, 66, 247, 0.2); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+    -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-color: white;
+    color: black;
+    font-family: system-ui, -apple-system, -apple-system-font, "Segoe UI", "Roboto", sans-serif;
+    font-size: 12px;
+    height: 100vh;
+    margin: 0;
+    width: 100%;
+}
+
+.app {
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.container {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    padding: 16px;
+}
+
+.line {
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-style: inset;
+    border-width: 1px;
+}
+
+.listening {
+    background: url(../res/logo.png);
+    background-size: cover;
+    height: 150px;
+    width: 150px;
+    display: block;
+}
+
+@keyframes fade {
+    from {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.blink {
+    animation: fade 3000ms infinite;
+    -webkit-animation: fade 3000ms infinite;
+}

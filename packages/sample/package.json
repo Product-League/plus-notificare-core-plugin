@@ -1,9 +1,9 @@
 {
   "name": "sample",
   "private": "true",
-  "displayName": "HelloCordova",
+  "displayName": "Sample",
   "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "description": "A simplified fashion application to demonstrate Notificare basic features.",
   "main": "index.js",
   "scripts": {
     "android": "cordova run android",
@@ -16,7 +16,7 @@
   "keywords": [
     "ecosystem:cordova"
   ],
-  "author": "Apache Cordova Team",
+  "author": "Notificare",
   "license": "Apache-2.0",
   "devDependencies": {
     "cordova-android": "^10.1.1",

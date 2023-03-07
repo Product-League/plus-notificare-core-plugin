@@ -1,8 +1,15 @@
 document.addEventListener('deviceready', onDeviceReady, false);
 
-function onDeviceReady() {
-  console.log(`---> Launching Notificare <---`);
+async function onDeviceReady() {
+  try {
+    if (await Notificare.isReady()) {
+      return;
+    }
+  } catch (e) {
+    console.log(e);
+  }
 
+  console.log(`---> Launching Notificare <---`);
   launchNotificare();
 }
 
@@ -103,7 +110,7 @@ async function disableLocationUpdates() {
 function rangingBeacons() {
   try {
     console.log(`---> Ranging Beacons Clicked <---`);
-    window.location.assign('../beacons/beacons.html');
+    window.location.replace('../beacons/beacons.html');
   } catch (e) {
     console.log(e);
   }
@@ -156,7 +163,7 @@ async function disbaleRemoteNotifications() {
 function openInbox() {
   try {
     console.log(`---> Open Inbox Clicked <---`);
-    window.location.assign('../inbox/inbox.html');
+    window.location.replace('../inbox/inbox.html');
   } catch (e) {
     console.log(e);
   }
@@ -603,22 +610,6 @@ async function getPurchases() {
     console.log(`---> Get Purchases Clicked <---`);
     const purchases = await NotificareMonetize.getPurchases();
     console.log(`---> Purchases = ${JSON.stringify(purchases)}`);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function startPurchase() {
-  try {
-    console.log(`---> Start Purchase Clicked <---`);
-    const products = await NotificareMonetize.getProducts();
-    if (products.length === 0) {
-      console.log(`---> No Products to Purchase, skipping.`);
-      return;
-    }
-
-    await NotificareMonetize.startPurchaseFlow(products[0]);
   } catch (e) {
     console.log(e);
   }

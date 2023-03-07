@@ -61,9 +61,7 @@
 
     <platform name="ios">
         <preference name="SwiftVersion" value="5" />
-        <preference name="AllowBackForwardNavigationGestures" value="true" />
         <preference name="deployment-target" value="11.0" />
-        <preference name="BackupWebStorage" value="none"/>
 
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />

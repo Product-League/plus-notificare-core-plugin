@@ -1,21 +1,26 @@
 document.addEventListener('deviceready', onDeviceReady, false);
+document.addEventListener('backbutton', handleBackButton, false);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function onDeviceReady() {
+function onDeviceReady() {
   const noDataView = `<div id="noDataMessage" class="centered">No Beacons Found</div>`;
   document.getElementById('beaconsList').innerHTML = noDataView;
 
   NotificareGeo.onBeaconsRanged(({ region, beacons }) => {
     if (beacons.length > 0) {
       document.getElementById('beaconsList').replaceChildren();
-      beacons.forEach(region, createBeaconItem);
+      beacons.forEach(createBeaconItem);
     } else {
       document.getElementById('beaconsList').innerHTML = noDataView;
     }
   });
 }
 
-function createBeaconItem(beacon) {
+function handleBackButton() {
+  window.location.replace('../home/home.html');
+}
+
+function createBeaconItem(region, beacon) {
   const beaconView = `<div class="container">
   <div class="beacons-container">
     <span>Region name: ${region.name}</span>

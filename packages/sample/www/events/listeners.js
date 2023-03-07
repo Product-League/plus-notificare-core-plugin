@@ -1,11 +1,21 @@
 document.addEventListener('deviceready', onDeviceReady, false);
 
-// try window.reload
 function onDeviceReady() {
   setupListeners();
 }
 
-async function setupListeners() {
+function setupListeners() {
+  Notificare.onReady((application) => {
+    console.log('=======================');
+    console.log('= NOTIFICARE IS READY =');
+    console.log('=======================');
+    console.log(JSON.stringify(application));
+  });
+
+  Notificare.onDeviceRegistered((device) => {
+    console.log(`---> Device registered: ${JSON.stringify(device)}`);
+  });
+
   console.log(`---> Setup Notificare Listeners <---`);
   // Set listeners
   NotificarePush.onNotificationReceived((notification) => {
@@ -218,17 +228,6 @@ async function setupListeners() {
   NotificareInAppMessaging.onActionFailedToExecute(({ message, action, error }) => {
     console.log('=== ACTION FAILED TO EXECUTE ===');
     console.log(JSON.stringify({ message, action, error }, null, 2));
-  });
-
-  Notificare.onReady(async (application) => {
-    console.log('=======================');
-    console.log('= NOTIFICARE IS READY =');
-    console.log('=======================');
-    console.log(JSON.stringify(application));
-  });
-
-  Notificare.onDeviceRegistered((device) => {
-    console.log(`---> Device registered: ${JSON.stringify(device)}`);
   });
 
   console.log(`---> Notificare Listeners are ready <---`);

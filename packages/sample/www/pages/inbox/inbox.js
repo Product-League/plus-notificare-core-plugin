@@ -1,14 +1,19 @@
 document.addEventListener('deviceready', onDeviceReady, false);
+document.addEventListener('backbutton', handleBackButton, false);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function onDeviceReady() {
   const noDataView = `<div id="noDataMessage" class="centered">No Notifications Found</div>`;
 
-  let initItems = await NotificareInbox.getItems();
-  if (initItems.length > 0) {
-    initItems.forEach(createInboxItem);
-  } else {
-    document.getElementById('inboxList').innerHTML = noDataView;
+  try {
+    let initItems = await NotificareInbox.getItems();
+    if (initItems.length > 0) {
+      initItems.forEach(createInboxItem);
+    } else {
+      document.getElementById('inboxList').innerHTML = noDataView;
+    }
+  } catch (e) {
+    console.log(e);
   }
 
   NotificareInbox.onInboxUpdated((items) => {
@@ -48,6 +53,11 @@ async function remove(item) {
   } catch (e) {
     console.log(e);
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function handleBackButton() {
+  window.location.replace('../home/home.html');
 }
 
 function handleClick(element, item) {

@@ -1,14 +1,14 @@
 document.addEventListener('deviceready', onDeviceReady, false);
 document.addEventListener('backbutton', handleBackButton, false);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function onDeviceReady() {
   const noDataView = `<div id="noDataMessage" class="centered">No Notifications Found</div>`;
 
   try {
     let initItems = await NotificareInbox.getItems();
     if (initItems.length > 0) {
-      initItems.forEach(createInboxItem);
+      const nodes = initItems.map((item, index) => createInboxItem(item, index));
+      document.getElementById('inboxList').replaceChildren(...nodes);
     } else {
       document.getElementById('inboxList').innerHTML = noDataView;
     }
@@ -17,10 +17,9 @@ async function onDeviceReady() {
   }
 
   NotificareInbox.onInboxUpdated((items) => {
-    document.getElementById('inboxList').replaceChildren();
-
     if (items.length > 0) {
-      items.forEach(createInboxItem);
+      const nodes = items.map((item, index) => createInboxItem(item, index));
+      document.getElementById('inboxList').replaceChildren(...nodes);
     } else {
       document.getElementById('inboxList').innerHTML = noDataView;
     }
@@ -55,7 +54,6 @@ async function remove(item) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleBackButton() {
   window.location.replace('../home/home.html');
 }
@@ -102,7 +100,7 @@ function handleClick(element, item) {
   });
 }
 
-function createInboxItem(item) {
+function createInboxItem(item, index) {
   const image = item.notification.attachments[0] != null ? item.notification.attachments[0].uri : '../../res/logo.png';
 
   const itemView = `<div class="container">
@@ -121,19 +119,20 @@ function createInboxItem(item) {
   </div>
 </div>`;
 
-  const lineView = `<div class="line" />`;
-
   const itemElement = document.createElement('div');
   itemElement.innerHTML = itemView;
 
-  const lineElement = document.createElement('div');
-  lineElement.innerHTML = lineView;
+  const container = document.createElement('div');
 
   handleClick(itemElement, item);
 
-  if (document.getElementById('inboxList').children.length > 0) {
-    document.getElementById('inboxList').appendChild(lineElement);
+  if (index > 0) {
+    const lineElement = document.createElement('div');
+    lineElement.classList.add('line');
+    container.appendChild(lineElement);
   }
 
-  document.getElementById('inboxList').appendChild(itemElement);
+  container.appendChild(itemElement);
+
+  return container;
 }

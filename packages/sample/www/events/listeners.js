@@ -1,10 +1,8 @@
-document.addEventListener('deviceready', onDeviceReady, false);
-
-function onDeviceReady() {
-  setupListeners();
-}
+document.addEventListener('deviceready', setupListeners, false);
 
 function setupListeners() {
+  console.log(`---> Setup Notificare Listeners <---`);
+
   Notificare.onReady((application) => {
     console.log('=======================');
     console.log('= NOTIFICARE IS READY =');
@@ -16,8 +14,6 @@ function setupListeners() {
     console.log(`---> Device registered: ${JSON.stringify(device)}`);
   });
 
-  console.log(`---> Setup Notificare Listeners <---`);
-  // Set listeners
   NotificarePush.onNotificationReceived((notification) => {
     console.log(`---> Received notification = ${JSON.stringify(notification)}`);
   });

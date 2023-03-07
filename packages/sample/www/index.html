@@ -13,6 +13,15 @@
 <body>
 <div class="listening centered blink"></div>
 <script src="cordova.js"></script>
-<script src="index.js"></script>
+<script type="text/javascript">
+    document.addEventListener('deviceready', onDeviceReady, false);
+
+    function onDeviceReady() {
+        console.log(`---> Cordova "deviceready" event fires, opening home page <---`);
+        console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
+
+        window.location.replace('pages/home/home.html');
+    }
+</script>
 </body>
 </html>

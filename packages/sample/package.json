@@ -4,7 +4,7 @@
   "displayName": "Sample",
   "version": "1.0.0",
   "description": "A simplified fashion application to demonstrate Notificare basic features.",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "android": "cordova run android",
     "ios": "cordova run ios",

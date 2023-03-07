@@ -5,7 +5,7 @@
         A simplified fashion application to demonstrate Notificare basic features.
     </description>
     <author email="support@notifica.re" href="https://notificare.com">
-        Apache Cordova Team
+        Notificare
     </author>
     <content src="index.html" />
     <access origin="*" />

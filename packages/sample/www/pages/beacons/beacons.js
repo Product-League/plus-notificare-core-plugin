@@ -8,8 +8,8 @@ function onDeviceReady() {
 
   NotificareGeo.onBeaconsRanged(({ region, beacons }) => {
     if (beacons.length > 0) {
-      document.getElementById('beaconsList').replaceChildren();
-      beacons.forEach(createBeaconItem);
+      const nodes = beacons.map((beacon) => createBeaconItem(region, beacon));
+      document.getElementById('beaconsList').replaceChildren(...nodes);
     } else {
       document.getElementById('beaconsList').innerHTML = noDataView;
     }
@@ -22,26 +22,28 @@ function handleBackButton() {
 
 function createBeaconItem(region, beacon) {
   const beaconView = `<div class="container">
-  <div class="beacons-container">
-    <span>Region name: ${region.name}</span>
-    <span>Name: ${beacon.name}</span>
-    <span>Proximity: ${beacon.proximity}</span>
-    <span>Major: ${beacon.major}</span>
-    <span>Minor: ${beacon.minor ?? '-'}</span>
-  </div>
-</div>`;
-
-  const lineView = `<div class="line" />`;
+    <div class="beacons-container">
+      <span>Region name: ${region.name}</span>
+      <span>Name: ${beacon.name}</span>
+      <span>Proximity: ${beacon.proximity}</span>
+      <span>Major: ${beacon.major}</span>
+      <span>Minor: ${beacon.minor ?? '-'}</span>
+    </div>
+  </div>`;
 
   const beaconElement = document.createElement('div');
   beaconElement.innerHTML = beaconView;
 
   const lineElement = document.createElement('div');
-  lineElement.innerHTML = lineView;
+  lineElement.classList.add('line');
 
-  if (document.getElementById('beaconsList').children.length > 0) {
-    document.getElementById('beaconsList').appendChild(lineElement);
+  const container = document.createElement('div');
+
+  if (document.getElementById('beaconsList').children.length > 1) {
+    container.appendChild(lineElement);
   }
 
-  document.getElementById('beaconsList').appendChild(beaconElement);
+  container.appendChild(beaconElement);
+
+  return container;
 }

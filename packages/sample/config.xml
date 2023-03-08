@@ -24,6 +24,8 @@
         <preference name="AndroidGradlePluginVersion" value="7.3.1" />
         <preference name="GradlePluginKotlinVersion" value="1.6.21" />
 
+        <preference name="AndroidLaunchMode" value="singleTask" />
+
         <allow-intent href="market:*" />
 
         <resource-file src="notificare-services.json" target="app/notificare-services.json" />
@@ -33,15 +35,6 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="re.notifica.debug_logging_enabled" android:value="true" />
         </config-file>
-
-        <edit-config file="AndroidManifest.xml" target="/manifest/application/activity/[@android:name='MainActivity']" mode="merge">
-            <activity android:launchMode="singleTask" />
-        </edit-config>
-
-        <!-- Temporary fix until Cordova supports Android 12 -->
-        <edit-config file="AndroidManifest.xml" target="/manifest/application/activity/[@android:name='MainActivity']" mode="merge">
-            <activity android:exported="true" />
-        </edit-config>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application/activity/[@android:name='MainActivity']">
             <intent-filter>

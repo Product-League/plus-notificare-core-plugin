@@ -22,11 +22,13 @@
 .title {
     font-size: 14px;
     font-weight: bold;
+    word-break: break-all;
 }
 
 .message {
     font-size: 12px;
     font-weight: normal;
+    word-break: break-all;
 }
 
 .time {

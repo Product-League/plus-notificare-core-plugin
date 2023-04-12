@@ -120,10 +120,10 @@ concat-map@0.0.1:
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-cordova-android@^10.1.1:
-  version "10.1.1"
-  resolved "https://registry.npmjs.org/cordova-android/-/cordova-android-10.1.1.tgz"
-  integrity sha512-eoJp5AcDMHniqmxj0CbUF/rVQfbbp108TWKU6oyJW9rl/ZTJqZxm5ybznl+1/1MBksklxhMeipMn0Iwd0kEzEQ==
+cordova-android@^10.1.2:
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/cordova-android/-/cordova-android-10.1.2.tgz#3abfabb5fbc77dc3b90d7173c64cb2f8ad3d80df"
+  integrity sha512-F28+NvgKO4ZhKFkqctCOh62mhVoNyUuRQh/F/nqp+Sti4ODv2rUa6UeW18khhdYTjlDeihHQsPqxvB7mI6fVYA==
   dependencies:
     android-versions "^1.7.0"
     cordova-common "^4.0.2"

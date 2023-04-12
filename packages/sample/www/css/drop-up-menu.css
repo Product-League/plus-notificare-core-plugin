@@ -1,0 +1,34 @@
+.dropup {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.dropup-content {
+    position: absolute;
+    background-color: #f1f1f1;
+    width: 100%;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s ease;
+    bottom: 0;
+    z-index: 2;
+}
+
+.dropup-content a {
+    display: block;
+    color: black;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    padding: 12px 16px;
+}
+
+.dropup-content a:hover {
+    background-color: #ccc;
+}
+
+.dropup-show {
+    transform: scaleY(1);
+}

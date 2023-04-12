@@ -77,4 +77,4 @@ Get started with our [📚 integration guides](https://docs.notifica.re/sdk/v3/c
 
 
 ### Examples
-- The [example project](https://github.com/Notificare/notificare-sdk-cordova/tree/main/sample) demonstrates other integrations in a simplified fashion, to quickly understand how a given feature should be implemented.
+- The [example project](https://github.com/Notificare/notificare-sdk-cordova/tree/main/packages/sample) demonstrates other integrations in a simplified fashion, to quickly understand how a given feature should be implemented.

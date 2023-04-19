@@ -55,7 +55,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareUserInboxKit" spec="3.5.0" />
+                <pod name="Notificare/NotificareUserInboxKit" spec="3.5.1" />
             </pods>
         </podspec>
     </platform>

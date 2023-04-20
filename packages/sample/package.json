@@ -34,7 +34,7 @@
     "cordova-plugin-notificare-scannables": "3.5.0",
     "cordova-plugin-notificare-user-inbox": "3.5.0",
     "cordova-plugin-whitelist": "^1.3.4",
-    "ios-deploy": "^1.11.4"
+    "ios-deploy": "github:ios-control/ios-deploy.git#417eded5505266e1d674f940b2e0e94eaf288fec"
   },
   "cordova": {
     "plugins": {

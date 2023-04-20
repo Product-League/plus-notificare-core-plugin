@@ -17,7 +17,7 @@
         <config-file target="config.xml" parent="/*">
             <preference name="AndroidXEnabled" value="true" />
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <preference name="GradlePluginKotlinVersion" value="1.6.21" />
+            <preference name="GradlePluginKotlinVersion" value="1.7.20" />
         </config-file>
 
         <config-file parent="/widget" target="res/xml/config.xml">

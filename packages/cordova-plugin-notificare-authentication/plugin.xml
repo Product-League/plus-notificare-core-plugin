@@ -11,7 +11,7 @@
         <merges target="cordova.plugins.NotificareAuthentication" />
     </js-module>
 
-    <asset src="build/notificare-authentication.bundle.js.map" target="plugins/notificare-authentication/build/notificare-authentication.bundle.js.map" />
+    <asset src="build/notificare-authentication.bundle.js.map" target="plugins/cordova-plugin-notificare-authentication/build/notificare-authentication.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">

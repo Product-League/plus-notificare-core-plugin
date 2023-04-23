@@ -11,7 +11,7 @@
         <merges target="cordova.plugins.NotificareInbox" />
     </js-module>
 
-    <asset src="build/notificare-inbox.bundle.js.map" target="plugins/notificare-inbox/build/notificare-inbox.bundle.js.map" />
+    <asset src="build/notificare-inbox.bundle.js.map" target="plugins/cordova-plugin-notificare-inbox/build/notificare-inbox.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">

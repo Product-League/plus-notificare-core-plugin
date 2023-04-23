@@ -11,7 +11,7 @@
         <merges target="cordova.plugins.NotificarePushUI" />
     </js-module>
 
-    <asset src="build/notificare-push-ui.bundle.js.map" target="plugins/notificare-push-ui/build/notificare-push-ui.bundle.js.map" />
+    <asset src="build/notificare-push-ui.bundle.js.map" target="plugins/cordova-plugin-notificare-push-ui/build/notificare-push-ui.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">

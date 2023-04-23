@@ -11,7 +11,7 @@
         <merges target="cordova.plugins.NotificareInAppMessaging" />
     </js-module>
 
-    <asset src="build/notificare-in-app-messaging.bundle.js.map" target="plugins/notificare-in-app-messaging/build/notificare-in-app-messaging.bundle.js.map" />
+    <asset src="build/notificare-in-app-messaging.bundle.js.map" target="plugins/cordova-plugin-notificare-in-app-messaging/build/notificare-in-app-messaging.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">

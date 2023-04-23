@@ -11,7 +11,7 @@
         <merges target="cordova.plugins.NotificareLoyalty" />
     </js-module>
 
-    <asset src="build/notificare-loyalty.bundle.js.map" target="plugins/notificare-loyalty/build/notificare-loyalty.bundle.js.map" />
+    <asset src="build/notificare-loyalty.bundle.js.map" target="plugins/cordova-plugin-notificare-loyalty/build/notificare-loyalty.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">

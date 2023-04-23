@@ -11,7 +11,7 @@
         <merges target="cordova.plugins.NotificareScannables" />
     </js-module>
 
-    <asset src="build/notificare-scannables.bundle.js.map" target="plugins/notificare-scannables/build/notificare-scannables.bundle.js.map" />
+    <asset src="build/notificare-scannables.bundle.js.map" target="plugins/cordova-plugin-notificare-scannables/build/notificare-scannables.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">

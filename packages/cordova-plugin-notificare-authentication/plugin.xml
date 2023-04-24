@@ -11,14 +11,14 @@
         <merges target="cordova.plugins.NotificareAuthentication" />
     </js-module>
 
-    <asset src="build/notificare-authentication.bundle.js.map" target="plugins/notificare-authentication/build/notificare-authentication.bundle.js.map" />
+    <asset src="build/notificare-authentication.bundle.js.map" target="plugins/cordova-plugin-notificare-authentication/build/notificare-authentication.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">
             <preference name="AndroidXEnabled" value="true" />
 
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <preference name="GradlePluginKotlinVersion" value="1.6.21" />
+            <preference name="GradlePluginKotlinVersion" value="1.7.20" />
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/widget">
@@ -57,7 +57,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareAuthenticationKit" spec="3.5.0" />
+                <pod name="Notificare/NotificareAuthenticationKit" spec="3.5.1" />
             </pods>
         </podspec>
     </platform>

@@ -11,14 +11,14 @@
         <merges target="cordova.plugins.NotificareMonetize" />
     </js-module>
 
-    <asset src="build/notificare-monetize.bundle.js.map" target="plugins/notificare-monetize/build/notificare-monetize.bundle.js.map" />
+    <asset src="build/notificare-monetize.bundle.js.map" target="plugins/cordova-plugin-notificare-monetize/build/notificare-monetize.bundle.js.map" />
 
     <platform name="android">
         <config-file target="config.xml" parent="/*">
             <preference name="AndroidXEnabled" value="true" />
 
             <preference name="GradlePluginKotlinEnabled" value="true" />
-            <preference name="GradlePluginKotlinVersion" value="1.6.21" />
+            <preference name="GradlePluginKotlinVersion" value="1.7.20" />
 
             <preference name="GradlePluginGoogleServicesEnabled" value="true" />
             <preference name="GradlePluginGoogleServicesVersion" value="4.3.14" />
@@ -60,7 +60,7 @@
                 <source url="https://github.com/CocoaPods/Specs.git" />
             </config>
             <pods use-frameworks="true">
-                <pod name="Notificare/NotificareMonetizeKit" spec="3.5.0" />
+                <pod name="Notificare/NotificareMonetizeKit" spec="3.5.1" />
             </pods>
         </podspec>
     </platform>

@@ -346,10 +346,9 @@ interpret@^1.0.0:
   resolved "https://registry.npmjs.org/interpret/-/interpret-1.4.0.tgz"
   integrity sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==
 
-ios-deploy@^1.11.4:
-  version "1.11.4"
-  resolved "https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.11.4.tgz"
-  integrity sha512-NZ96/s7klyWySKTI8rTU+vXEIxIMrv6K+7j5VMcqUVShaAUdDX+Ov4nVdSStYOAGFVpl8q56SpAwjEDIvBrswQ==
+"ios-deploy@github:ios-control/ios-deploy.git#417eded5505266e1d674f940b2e0e94eaf288fec":
+  version "1.12.1"
+  resolved "https://codeload.github.com/ios-control/ios-deploy/tar.gz/417eded5505266e1d674f940b2e0e94eaf288fec"
 
 ios-sim@^8.0.2:
   version "8.0.2"

@@ -58,7 +58,6 @@ We have moved to several new packages. Here's all the dependencies available:
   "dependencies": {
     "cordova-plugin-notificare": "3.0.0",
     "cordova-plugin-notificare-assets": "3.0.0",
-    "cordova-plugin-notificare-authentication": "3.0.0",
     "cordova-plugin-notificare-geo": "3.0.0",
     "cordova-plugin-notificare-inbox": "3.0.0",
     "cordova-plugin-notificare-loyalty": "3.0.0",

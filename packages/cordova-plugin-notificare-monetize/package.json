@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-notificare-monetize",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "Notificare Monetize Cordova Plugin.",
   "author": "Notificare <info@notifica.re> (https://notificare.com)",
   "license": "MIT",
@@ -40,10 +40,10 @@
     "docs:replace-symbolic-links": "rm README.md CHANGELOG.md MIGRATION.md; cp ../../README.md ../../CHANGELOG.md ../../MIGRATION.md ."
   },
   "peerDependencies": {
-    "cordova-plugin-notificare": "3.5.0"
+    "cordova-plugin-notificare": "3.5.1"
   },
   "devDependencies": {
-    "cordova-plugin-notificare": "3.5.0"
+    "cordova-plugin-notificare": "3.5.1"
   },
   "cordova": {
     "id": "cordova-plugin-notificare-monetize",

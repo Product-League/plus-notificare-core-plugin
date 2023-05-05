@@ -59,7 +59,6 @@ yarn add cordova-plugin-notificare
 
 # Optional modules
 yarn add cordova-plugin-notificare-assets
-yarn add cordova-plugin-notificare-authentication
 yarn add cordova-plugin-notificare-geo
 yarn add cordova-plugin-notificare-in-app-messaging
 yarn add cordova-plugin-notificare-inbox

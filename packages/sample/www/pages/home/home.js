@@ -497,17 +497,6 @@ async function validateUser() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function generatePushEmail() {
-  try {
-    console.log(`---> Generate New Email Clicked <---`);
-    const generatedEmail = await NotificareAuthentication.generatePushEmailAddress();
-    console.log(`---> Generated email result = ${JSON.stringify(generatedEmail)}`);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function addUserSegment() {
   try {
     console.log(`---> Add User Segment Clicked <---`);

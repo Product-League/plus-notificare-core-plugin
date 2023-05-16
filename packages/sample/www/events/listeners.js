@@ -149,20 +149,6 @@ function setupListeners() {
     console.log(JSON.stringify(error, null, 2));
   });
 
-  NotificareAuthentication.onPasswordResetTokenReceived(async (token) => {
-    console.log('=== PASSWORD RESET TOKEN RECEIVED ===');
-    console.log(JSON.stringify(token, null, 2));
-
-    await NotificareAuthentication.resetPassword('123456', token);
-  });
-
-  NotificareAuthentication.onValidateUserTokenReceived(async (token) => {
-    console.log('=== VALIDATE USER TOKEN RECEIVED ===');
-    console.log(JSON.stringify(token, null, 2));
-
-    await NotificareAuthentication.validateUser(token);
-  });
-
   NotificareMonetize.onBillingSetupFinished(() => {
     console.log('=== BILLING SETUP FINISHED ===');
   });

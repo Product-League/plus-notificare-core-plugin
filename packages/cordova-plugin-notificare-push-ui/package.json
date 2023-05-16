@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-notificare-push-ui",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "Notificare Push UI Cordova Plugin.",
   "author": "Notificare <info@notifica.re> (https://notificare.com)",
   "license": "MIT",
@@ -40,10 +40,10 @@
     "docs:replace-symbolic-links": "rm README.md CHANGELOG.md MIGRATION.md; cp ../../README.md ../../CHANGELOG.md ../../MIGRATION.md ."
   },
   "peerDependencies": {
-    "cordova-plugin-notificare": "3.5.1"
+    "cordova-plugin-notificare": "3.5.2"
   },
   "devDependencies": {
-    "cordova-plugin-notificare": "3.5.1"
+    "cordova-plugin-notificare": "3.5.2"
   },
   "cordova": {
     "id": "cordova-plugin-notificare-push-ui",

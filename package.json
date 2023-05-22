@@ -1,34 +1,58 @@
 {
-  "name": "root",
-  "private": true,
-  "scripts": {
-    "app:android": "lerna run android --scope sample --stream",
-    "app:android:studio": "studio packages/sample/platforms/android",
-    "app:ios": "lerna run ios --scope sample --stream",
-    "app:ios:xcode": "open packages/sample/platforms/ios/Sample.xcworkspace",
-    "app:cordova:refresh-plugins": "lerna run cordova:refresh-plugins --scope sample --stream",
-    "lint": "lerna run lint",
-    "pack": "lerna run pack",
-    "prepare": "husky install",
-    "typescript": "lerna run build:typescript -- --noEmit"
+  "name": "cordova-plugin-notificare",
+  "version": "3.5.2",
+  "description": "Notificare Cordova Plugin.",
+  "author": "Notificare <info@notifica.re> (https://notificare.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/notificare/notificare-sdk-cordova#readme",
+  "repository": {
+    "url": "https://github.com/Notificare/notificare-sdk-cordova"
   },
-  "devDependencies": {
-    "@commitlint/cli": "^16.0.1",
-    "@commitlint/config-conventional": "^16.0.0",
-    "@types/cordova": "^0.0.34",
-    "@typescript-eslint/eslint-plugin": "^5.10.2",
-    "@typescript-eslint/parser": "^5.10.2",
-    "cordova": "^11.0.0",
-    "eslint": "^8.8.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.4",
-    "lerna": "^4.0.0",
-    "prettier": "^2.5.1",
-    "rollup": "^2.35.1",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.29.0",
-    "typescript": "^4.5.4"
+  "bugs": {
+    "url": "https://github.com/Notificare/notificare-sdk-cordova/issues"
+  },
+  "keywords": [
+    "notificare",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "main": "build/notificare.bundle.js",
+  "types": "build/js/index.d.ts",
+  "files": [
+    "src",
+    "build",
+    "plugin.xml",
+    "CHANGELOG.md",
+    "MIGRATION.md"
+  ],
+  "scripts": {
+    "build": "yarn clean; yarn build:typescript; yarn build:bundle",
+    "build:typescript": "tsc",
+    "build:bundle": "rollup --config",
+    "clean": "rm -rf build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "pack": "npm pack",
+    "prepack": "yarn build; yarn docs:replace-symbolic-links",
+    "postpack": "yarn docs:create-symbolic-links",
+    "prepare": "yarn build",
+    "docs:create-symbolic-links": "rm README.md CHANGELOG.md MIGRATION.md; ln -s ../../README.md ../../CHANGELOG.md ../../MIGRATION.md .",
+    "docs:replace-symbolic-links": "rm README.md CHANGELOG.md MIGRATION.md; cp ../../README.md ../../CHANGELOG.md ../../MIGRATION.md ."
+  },
+  "cordova": {
+    "id": "cordova-plugin-notificare",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "engines": {
+    "cordovaDependencies": {
+      ">=3.0.0": {
+        "cordova": ">= 9.0.0",
+        "cordova-android": ">=8.0.0",
+        "cordova-ios": ">=5.0.0"
+      }
+    }
   }
 }
